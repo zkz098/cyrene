@@ -6,7 +6,7 @@ import { importFrontmatterFromXlsx, readAndParseMultipleFrontmatter } from '../u
 
 const filesStore = useFilesStore()
 
-if (!filesStore.ready.fileContent) {
+async function loadFilesFrontmatter() {
   const temps = await readAndParseMultipleFrontmatter(filesStore.getFileAbsolutePathList())
   Object.keys(temps).forEach((key) => {
     if (!filesStore.files[key]) {
@@ -22,6 +22,10 @@ if (!filesStore.ready.fileContent) {
   filesStore.ready.fileContent = true
 }
 
+if (!filesStore.ready.fileContent) {
+  await loadFilesFrontmatter()
+}
+
 async function importFromXLSX() {
   const selected = await open({
     title: '请选择要导入的 XLSX 文件',
@@ -34,10 +38,14 @@ async function importFromXLSX() {
   })
 
   if (selected) {
-    console.log(await importFrontmatterFromXlsx(selected, filesStore.basePath))
+    await importFrontmatterFromXlsx(selected, filesStore.basePath)
 
     // 重新加载文件内容
     filesStore.ready.fileContent = false
+
+    await loadFilesFrontmatter()
+    // 不需要调整 modified 状态，因为导入的内容是直接从 FS 操作的
+    filesStore.ready.fileContent = true
   }
 }
 </script>
