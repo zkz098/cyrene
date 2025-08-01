@@ -10,6 +10,18 @@
 - 批量增加、删除和归一化 frontmatter
 - 将所有文章的 frontmatter 导出为 XLSX 或从 XLSX 导入
 
+## 下载与安装
+
+还没有发行版，可通过 actions 下载工件来安装
+
+目前构建了如下架构的版本：
+
+- Windows x64
+- Windows aarch64（ARM64）
+- Linux x64
+- MacOS x64 （Intel Mac）
+- MacOS aarch64（M1/2/3... 系列）
+
 ## 使用教程
 
 进入应用后默认位于首页，点击右侧黑色按钮，选择你的博客储存文章的文件夹（如`source/_posts`、`pages`和`source`等），点击确定
