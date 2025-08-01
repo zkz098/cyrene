@@ -32,3 +32,13 @@ num_cpus = "1.17.0"
 rayon = "1.10.0"
 tauri-plugin-dialog = "2"
 umya-spreadsheet = "2.3.1"
+mimalloc = { version = "0.1", features = [ "override" ] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+debug = false
+panic = "abort"
+strip = true
+incremental = false
