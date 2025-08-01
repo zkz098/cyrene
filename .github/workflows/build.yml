@@ -84,7 +84,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.platform }}-${{ matrix.args != '' && replace(matrix.args, '--target ', '') || 'default' }}-build
+          name: ${{ format('{0}-{1}-build', matrix.platform, (matrix.args == '--target aarch64-apple-darwin' && 'aarch64-apple-darwin') || (matrix.args == '--target x86_64-apple-darwin' && 'x86_64-apple-darwin') || (matrix.args == '--target aarch64-unknown-linux-gnu' && 'aarch64-unknown-linux-gnu') || (matrix.args == '--target aarch64-pc-windows-msvc' && 'aarch64-pc-windows-msvc') || 'default') }}
           path: |
             src-tauri/target/release/bundle/*/*
             src-tauri/target/*/release/bundle/*/*
