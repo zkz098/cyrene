@@ -32,22 +32,33 @@ async function saveFiles() {
   <nav>
     <ul class="fixed m-0 h-90vh flex flex-col list-none items-center justify-start gap-8 rounded-2xl bg-gray-100 p-4 pt-8 text-8 color-gray-700">
       <li>
-        <RouterLink to="/">
+        <RouterLink
+          to="/"
+        >
           <div class="i-ri-home-line" />
         </RouterLink>
       </li>
       <li>
-        <RouterLink to="/files">
+        <RouterLink
+          to="/files"
+          :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
+        >
           <div class="i-ri-node-tree" />
         </RouterLink>
       </li>
       <li>
-        <RouterLink to="/edit">
+        <RouterLink
+          to="/edit"
+          :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
+        >
           <div class="i-ri-edit-box-line" />
         </RouterLink>
       </li>
       <li>
-        <RouterLink to="/export">
+        <RouterLink
+          to="/export"
+          :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
+        >
           <div class="i-ri-export-line" />
         </RouterLink>
       </li>
@@ -57,7 +68,10 @@ async function saveFiles() {
         </RouterLink>
       </li>
       <li>
-        <div @click="saveFiles">
+        <div
+          :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
+          @click="saveFiles"
+        >
           <div class="i-ri-save-2-line" />
         </div>
       </li>

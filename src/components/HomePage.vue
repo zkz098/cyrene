@@ -18,6 +18,7 @@ async function selectFolder() {
     folderPath.value = selected
     filesStore.ready.selectedFile = true
     filesStore.basePath = selected // 设置基准路径
+    filesStore.ready.fileList = true
   }
 
   (await getAllFilesOfDir(folderPath.value)).forEach((temp) => {
@@ -27,8 +28,6 @@ async function selectFolder() {
       modified: false,
     }
   })
-
-  filesStore.ready.fileList = true
 }
 </script>
 
@@ -48,7 +47,7 @@ async function selectFolder() {
       <p class="mt-2">
         现在你可以开始编辑了：<br>
         左侧的树形图标是文件列表，点击可以查看和编辑文件内容。<br>
-        导出按钮可以将所有文件导出为 CSV 格式或从 CSV 导入所有文件的 frontmatter。<br>
+        导出按钮可以将所有文件导出为 XLSX 格式或从 XLSX 导入所有文件的 frontmatter。<br>
         编辑按钮可以批量编辑 frontmatter 字段。<br>
         设置按钮可以配置一些选项，比如语言等。
       </p>
