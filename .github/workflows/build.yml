@@ -20,8 +20,12 @@ jobs:
             args: --target x86_64-apple-darwin
           - platform: ubuntu-22.04
             args: ''
+          - platform: ubuntu-22.04
+            args: --target aarch64-unknown-linux-gnu
           - platform: windows-latest
             args: ''
+          - platform: windows-latest
+            args: --target aarch64-pc-windows-msvc
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -38,13 +42,22 @@ jobs:
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+          targets: ${{ 
+            (matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin') ||
+            (matrix.platform == 'ubuntu-22.04' && matrix.args == '--target aarch64-unknown-linux-gnu' && 'aarch64-unknown-linux-gnu') ||
+            (matrix.platform == 'windows-latest' && matrix.args == '--target aarch64-pc-windows-msvc' && 'aarch64-pc-windows-msvc') ||
+            ''
+          }}
 
       - name: Install dependencies (Ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+          # Install cross-compilation tools for ARM64
+          if [[ "${{ matrix.args }}" == *"aarch64-unknown-linux-gnu"* ]]; then
+            sudo apt-get install -y gcc-aarch64-linux-gnu
+          fi
 
       - name: Install frontend dependencies
         run: pnpm install
@@ -53,6 +66,11 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Set up cross-compilation for Linux ARM64
+          CC_aarch64_unknown_linux_gnu: aarch64-linux-gnu-gcc
+          CXX_aarch64_unknown_linux_gnu: aarch64-linux-gnu-g++
+          AR_aarch64_unknown_linux_gnu: aarch64-linux-gnu-ar
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
         with:
           args: ${{ matrix.args }}
           # 如果要自动发布到GitHub Releases，取消下面的注释
@@ -65,5 +83,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.platform }}-build
-          path: src-tauri/target/release/bundle/*/*
+          name: ${{ matrix.platform }}-${{ matrix.args != '' && replace(matrix.args, '--target ', '') || 'default' }}-build
+          path: |
+            src-tauri/target/release/bundle/*/*
+            src-tauri/target/*/release/bundle/*/*
