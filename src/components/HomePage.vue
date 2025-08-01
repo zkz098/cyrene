@@ -49,7 +49,8 @@ async function selectFolder() {
         左侧的树形图标是文件列表，点击可以查看和编辑文件内容。<br>
         导出按钮可以将所有文件导出为 XLSX 格式或从 XLSX 导入所有文件的 frontmatter。<br>
         编辑按钮可以批量编辑 frontmatter 字段。<br>
-        设置按钮可以配置一些选项，比如语言等。
+        设置按钮可以配置一些选项，比如语言等。<br>
+        保存按钮可以将所有修改过的文件保存到文件系统中。
       </p>
     </div>
     <div v-else-if="filesStore.ready.selectedFile && !filesStore.ready.fileList" class="flex flex-col items-center justify-center p-4">
