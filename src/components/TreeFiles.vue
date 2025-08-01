@@ -45,13 +45,16 @@ watch(() => filesStore.currentAccessPath, async (newPath) => {
       <ul class="h-90vh min-w-30vw flex flex-col list-none items-start justify-start gap-2 overflow-scroll">
         <TreeNode v-for="(node, index) in filesStore.filetree" :key="index" :node="node" />
       </ul>
-      <div class="h-100% w-full flex items-start justify-start">
+      <div class="h-100% w-full flex flex-col items-start justify-start">
         <JsonEditor
           v-model="jsonContent"
           :readonly="false"
           theme="github-light"
           placeholder="请输入JSON内容..."
         />
+        <button class="mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" @click="filesStore.files[filesStore.currentAccessPath].frontmatter = JSON.parse(jsonContent)">
+          保存当前数据到内存
+        </button>
       </div>
     </div>
   </div>
