@@ -9,7 +9,3 @@ import NavBar from './NavBar.vue'
     <RouterView class="max-w-90vw flex-grow-19 overflow-x-hidden overflow-y-scroll lg:max-w-95vw" />
   </div>
 </template>
-
-<style lang="css" scoped>
-
-</style>

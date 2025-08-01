@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Highlighter } from 'shiki'
-import { createHighlighter } from 'shiki'
+import type { Highlighter } from 'shiki/bundle/web'
+import { createHighlighter } from 'shiki/bundle/web'
 import { nextTick, onMounted, ref, watch } from 'vue'
 
 interface Props {

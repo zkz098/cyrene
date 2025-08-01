@@ -15,7 +15,7 @@ if (!filesStore.ready.fileTree) {
   filesStore.ready.fileTree = true
 }
 
-const jsonContent = ref('{\n  "name": "example",\n  "value": 123\n}')
+const jsonContent = ref('{\n  "name": "这是树形视图界面",\n  "value": "你可以在此页面内编辑指定文档的frontmatter，从左侧中选择一个文件以开始"\n}')
 
 watch(() => filesStore.currentAccessPath, async (newPath) => {
   if (newPath) {

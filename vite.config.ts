@@ -6,7 +6,6 @@ import { defineConfig } from 'vite'
 const host = process.env.TAURI_DEV_HOST
 
 // https://vitejs.dev/config/
-// @ts-expect-error temp
 export default defineConfig(async () => ({
   plugins: [vue(), UnoCSS()],
 
