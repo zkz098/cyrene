@@ -35,10 +35,10 @@ async function operateBatch() {
   const modifiedCnt = ref(0)
 
   if (operation.value === 'add') {
-    modifiedCnt.value = filesStore.addKeyValueToFrontmatter(operateKey.value, operateValue.value, fileRegExp.value)
+    modifiedCnt.value = filesStore.addKeyValueToFrontmatter(operateKey.value.split(',').map(str => str.trim()), operateValue.value, fileRegExp.value)
   }
   else if (operation.value === 'remove') {
-    modifiedCnt.value = filesStore.removeKeyFromFrontmatter(operateKey.value, fileRegExp.value)
+    modifiedCnt.value = filesStore.removeKeyFromFrontmatter(operateKey.value.split(',').map(str => str.trim()), fileRegExp.value)
   }
   else if (operation.value === 'normalize') {
     modifiedCnt.value = filesStore.normalizeFrontmatter(operateKey.value.split(',').map(str => str.trim()), operateValue.value, fileRegExp.value)

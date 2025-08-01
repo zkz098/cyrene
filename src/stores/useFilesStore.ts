@@ -27,27 +27,33 @@ export const useFilesStore = defineStore('files', {
     setCurrentAccessPath(relativePath: string) {
       this.currentAccessPath = this.basePath + relativePath
     },
-    addKeyValueToFrontmatter(key: string, value: unknown, regexp: RegExp) {
+    addKeyValueToFrontmatter(keys: string[], value: unknown, regexp: RegExp) {
       let modifiedCnt = 0
       Object.values(this.files).forEach((file) => {
         if (regexp.test(file.relativePath)) {
-          file.frontmatter[key] = value
-          file.modified = true
-          modifiedCnt++
+          keys.forEach((key) => {
+            if (!(key in file.frontmatter)) {
+              file.frontmatter[key] = value
+              file.modified = true
+              modifiedCnt++
+            }
+          })
         }
       })
 
       return modifiedCnt
     },
-    removeKeyFromFrontmatter(key: string, regexp: RegExp) {
+    removeKeyFromFrontmatter(keys: string[], regexp: RegExp) {
       let modifiedCnt = 0
       Object.values(this.files).forEach((file) => {
         if (regexp.test(file.relativePath)) {
-          if (key in file.frontmatter) {
-            delete file.frontmatter[key]
-            file.modified = true
-            modifiedCnt++
-          }
+          keys.forEach((key) => {
+            if (key in file.frontmatter) {
+              delete file.frontmatter[key]
+              file.modified = true
+              modifiedCnt++
+            }
+          })
         }
       })
 
@@ -58,7 +64,7 @@ export const useFilesStore = defineStore('files', {
       Object.values(this.files).forEach((file) => {
         if (regexp.test(file.relativePath)) {
           sourceKey.forEach((key) => {
-            if (key in file.frontmatter) {
+            if (key in file.frontmatter && key !== targetKey) {
               if (file.frontmatter[targetKey] === undefined) {
                 file.frontmatter[targetKey] = file.frontmatter[key]
               }
@@ -66,6 +72,10 @@ export const useFilesStore = defineStore('files', {
             }
           })
           modifiedCnt++
+
+          if (file.frontmatter[targetKey] === undefined) {
+            file.frontmatter[targetKey] = ''
+          }
         }
       })
 
