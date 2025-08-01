@@ -19,3 +19,7 @@ export async function exportFrontmatterToXlsx(data: Record<string, Record<string
 export async function importFrontmatterFromXlsx(xlsxPath: string, basePath: string): Promise<string> {
   return await invoke('import_frontmatter_from_xlsx', { xlsxPath, basePath })
 }
+
+export async function writeMultipleFrontmatter(fileData: Record<string, Record<string, unknown>>): Promise<Record<string, boolean>> {
+  return await invoke('write_multiple_frontmatter', { fileData })
+}

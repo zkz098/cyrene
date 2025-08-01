@@ -1,5 +1,29 @@
 <script setup lang="ts">
+import { ask, message } from '@tauri-apps/plugin-dialog'
+import { useFilesStore } from './stores/useFilesStore'
+import { writeMultipleFrontmatter } from './utils/tauri'
 
+const filesStore = useFilesStore()
+
+async function saveFiles() {
+  const temp = {} as Record<string, Record<string, unknown>>
+
+  filesStore.getFileAbsolutePathList().forEach((key) => {
+    temp[key] = filesStore.files[key].frontmatter
+  })
+
+  const saveOrNot = await ask('你所作的更改将立刻写入到文件系统中，且不可撤销，是否继续？', { title: '确认保存', kind: 'warning' })
+
+  if (saveOrNot) {
+    const result = await writeMultipleFrontmatter(temp)
+    if (Object.values(result).every(v => v)) {
+      await message('所有文件已成功保存', { title: '保存成功', kind: 'info' })
+    }
+    else {
+      await message('部分文件保存失败，请检查日志', { title: '保存失败', kind: 'error' })
+    }
+  }
+}
 </script>
 
 <template>
@@ -29,6 +53,11 @@
         <RouterLink to="/settings">
           <div class="i-ri-settings-2-line" />
         </RouterLink>
+      </li>
+      <li>
+        <div @click="saveFiles">
+          <div class="i-ri-save-2-line" />
+        </div>
       </li>
     </ul>
   </nav>
