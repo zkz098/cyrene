@@ -36,7 +36,7 @@ async function selectFolder() {
     <div v-if="!filesStore.ready.selectedFile && !filesStore.ready.fileList" class="flex flex-col items-start justify-start p-4">
       <h1>欢迎使用 Frontmatter-Editor</h1>
 
-      <button class="mt-4 rounded-xl bg-dark px-4 py-2 color-gray-100" @click="selectFolder">
+      <button class="mt-4 rounded-xl bg-gray-700 px-4 py-2 text-white hover:bg-gray-800" @click="selectFolder">
         选择你存储文章的文件夹以开始
       </button>
     </div>

@@ -30,7 +30,7 @@ async function saveFiles() {
 
 <template>
   <nav>
-    <ul class="fixed m-0 h-90vh flex flex-col list-none items-center justify-start gap-8 rounded-2xl bg-gray-100 p-4 pt-8 text-8 color-gray-700">
+    <ul class="m-0 h-90vh flex flex-col list-none items-center justify-start gap-8 rounded-2xl bg-gray-100 p-4 pt-8 text-8 color-gray-700">
       <li>
         <RouterLink
           to="/"
