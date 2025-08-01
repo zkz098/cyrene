@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { open, save } from '@tauri-apps/plugin-dialog'
-import { watch } from 'vue'
 import { useFilesStore } from '../stores/useFilesStore'
 import { exportFrontmatterToXlsx, importFrontmatterFromXlsx, readAndParseMultipleFrontmatter } from '../utils/tauri'
 
