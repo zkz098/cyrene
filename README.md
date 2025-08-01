@@ -1,6 +1,6 @@
 # Frontmatter-editor
 
-WIP
+已基本达到可用水准
 
 一个用于批量编辑 markdown frontmatter 的工具
 

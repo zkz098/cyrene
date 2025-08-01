@@ -52,7 +52,7 @@ watch(() => filesStore.currentAccessPath, async (newPath) => {
           theme="github-light"
           placeholder="请输入JSON内容..."
         />
-        <button class="mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" @click="filesStore.files[filesStore.currentAccessPath].frontmatter = JSON.parse(jsonContent)">
+        <button class="m-2 mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" @click="filesStore.files[filesStore.currentAccessPath].frontmatter = JSON.parse(jsonContent)">
           保存当前数据到内存
         </button>
       </div>
