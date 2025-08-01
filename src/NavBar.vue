@@ -9,6 +9,8 @@ async function saveFiles() {
   const temp = {} as Record<string, Record<string, unknown>>
 
   filesStore.getFileAbsolutePathList().forEach((key) => {
+    if (filesStore.files[key].modified === false)
+      return
     temp[key] = filesStore.files[key].frontmatter
   })
 
