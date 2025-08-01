@@ -5,6 +5,7 @@ import { defineStore } from 'pinia'
 export const useFilesStore = defineStore('files', {
   state: () => ({
     basePath: '',
+    currentAccessPath: '',
     files: {} as Record<string, postFile>,
     filetree: [] as TreeNode[],
     ready: {
@@ -22,6 +23,9 @@ export const useFilesStore = defineStore('files', {
     },
     getFileRelativePathList() {
       return Object.values(this.files).map(file => file.relativePath)
+    },
+    setCurrentAccessPath(relativePath: string) {
+      this.currentAccessPath = this.basePath + relativePath
     },
     addKeyValueToFrontmatter(key: string, value: unknown, regexp: RegExp) {
       let modifiedCnt = 0
