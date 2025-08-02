@@ -108,7 +108,7 @@ pub fn run() {
             get_all_files_of_dir,
             xlsx::export_frontmatter_to_xlsx,
             xlsx::import_frontmatter_from_xlsx,
-            write::write_multiple_frontmatter,
+            write::write_multiple_frontmatter
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "home": "首页",
+    "files": "文件",
+    "edit": "编辑",
+    "export": "导出",
+    "settings": "设置"
+  },
+  "home": {
+    "title": "前置元数据编辑器",
+    "subtitle": "编辑和管理您的markdown前置元数据",
+    "welcomeMessage": "欢迎使用前置元数据编辑器",
+    "description": "一个强大的markdown文件前置元数据编辑工具",
+    "getStarted": "选择你存储文章的文件夹以开始",
+    "openFiles": "打开文件",
+    "recentFiles": "最近文件",
+    "noRecentFiles": "没有最近文件",
+    "instructionsStart": "现在你可以开始编辑了：",
+    "fileTreeInstruction": "左侧的树形图标是文件列表，点击可以查看和编辑文件内容。",
+    "exportInstruction": "导出按钮可以将所有文件导出为 XLSX 格式或从 XLSX 导入所有文件的 frontmatter。",
+    "editInstruction": "编辑按钮可以批量编辑 frontmatter 字段。",
+    "settingsInstruction": "设置按钮可以配置一些选项，比如语言等。",
+    "saveInstruction": "保存按钮可以将所有修改过的文件保存到文件系统中。",
+    "loadingMessage": "请稍等片刻，文件列表正在准备中。"
+  },
+  "files": {
+    "title": "文件浏览器",
+    "selectFolder": "选择文件夹",
+    "openFolder": "打开文件夹",
+    "noFolder": "未选择文件夹",
+    "loading": "文件树加载中...",
+    "loadingDescription": "请稍等片刻，文件树正在准备中。对于一些大型站点，此过程可能需要几分钟甚至更久。",
+    "refresh": "刷新",
+    "search": "搜索文件",
+    "noFiles": "未找到文件",
+    "fileTree": "文件树",
+    "jsonPlaceholder": "请输入JSON内容...",
+    "saveToMemory": "保存当前数据到内存",
+    "defaultName": "这是树形视图界面",
+    "defaultDescription": "你可以在此页面内编辑指定文档的frontmatter，从左侧中选择一个文件以开始"
+  },
+  "edit": {
+    "title": "编辑文件",
+    "selectFile": "选择要编辑的文件",
+    "fileName": "文件名",
+    "frontmatter": "前置元数据",
+    "content": "内容",
+    "save": "保存",
+    "cancel": "取消",
+    "saved": "文件保存成功",
+    "error": "保存文件时出错",
+    "preview": "预览",
+    "editMode": "编辑模式",
+    "previewMode": "预览模式"
+  },
+  "export": {
+    "title": "导出数据",
+    "selectFormat": "选择导出格式",
+    "formats": {
+      "xlsx": "Excel (XLSX)",
+      "csv": "CSV",
+      "json": "JSON"
+    },
+    "exportAll": "导出全部",
+    "exportSelected": "导出选中",
+    "noData": "没有数据可导出",
+    "success": "导出完成",
+    "error": "导出时出错",
+    "downloading": "下载中..."
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "languages": {
+      "en": "English",
+      "zh": "中文"
+    },
+    "theme": "主题",
+    "themes": {
+      "light": "浅色",
+      "dark": "深色",
+      "auto": "自动"
+    },
+    "editor": "编辑器设置",
+    "fontSize": "字体大小",
+    "tabSize": "制表符大小",
+    "wordWrap": "自动换行",
+    "lineNumbers": "行号",
+    "save": "保存设置",
+    "reset": "重置文章目录",
+    "saved": "设置保存成功"
+  },
+  "common": {
+    "ok": "确定",
+    "cancel": "取消",
+    "yes": "是",
+    "no": "否",
+    "confirm": "确认",
+    "delete": "删除",
+    "edit": "编辑",
+    "view": "查看",
+    "close": "关闭",
+    "open": "打开",
+    "save": "保存",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "warning": "警告",
+    "info": "信息",
+    "confirmSave": "你所作的更改将立刻写入到文件系统中，且不可撤销，是否继续？",
+    "saveSuccess": "所有文件已成功保存",
+    "saveError": "部分文件保存失败，请检查日志"
+  }
+}

@@ -7,6 +7,7 @@ import ExportPageReal from './components/ExportPageReal.vue'
 import HomePage from './components/HomePage.vue'
 import SettingPage from './components/SettingPage.vue'
 import TreeFiles from './components/TreeFiles.vue'
+import i18n from './i18n'
 import 'virtual:uno.css'
 
 const routes = [
@@ -24,4 +25,4 @@ const router = createRouter({
 
 const pinia = createPinia()
 
-createApp(App).use(pinia).use(router).mount('#app')
+createApp(App).use(pinia).use(router).use(i18n).mount('#app')

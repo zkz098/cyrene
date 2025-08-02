@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ask, message } from '@tauri-apps/plugin-dialog'
+import { useI18n } from 'vue-i18n'
 import { useFilesStore } from './stores/useFilesStore'
 import { writeMultipleFrontmatter } from './utils/tauri'
 
+const { t } = useI18n()
 const filesStore = useFilesStore()
 
 async function saveFiles() {
@@ -14,15 +16,15 @@ async function saveFiles() {
     temp[key] = filesStore.files[key].frontmatter
   })
 
-  const saveOrNot = await ask('你所作的更改将立刻写入到文件系统中，且不可撤销，是否继续？', { title: '确认保存', kind: 'warning' })
+  const saveOrNot = await ask(t('common.confirmSave'), { title: t('common.confirm'), kind: 'warning' })
 
   if (saveOrNot) {
     const result = await writeMultipleFrontmatter(temp)
     if (Object.values(result).every(v => v)) {
-      await message('所有文件已成功保存', { title: '保存成功', kind: 'info' })
+      await message(t('common.saveSuccess'), { title: t('common.success'), kind: 'info' })
     }
     else {
-      await message('部分文件保存失败，请检查日志', { title: '保存失败', kind: 'error' })
+      await message(t('common.saveError'), { title: t('common.error'), kind: 'error' })
     }
   }
 }
@@ -34,6 +36,7 @@ async function saveFiles() {
       <li>
         <RouterLink
           to="/"
+          :title="t('nav.home')"
         >
           <div class="i-ri-home-line" />
         </RouterLink>
@@ -41,6 +44,7 @@ async function saveFiles() {
       <li>
         <RouterLink
           to="/files"
+          :title="t('nav.files')"
           :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
         >
           <div class="i-ri-node-tree" />
@@ -49,6 +53,7 @@ async function saveFiles() {
       <li>
         <RouterLink
           to="/edit"
+          :title="t('nav.edit')"
           :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
         >
           <div class="i-ri-edit-box-line" />
@@ -57,18 +62,23 @@ async function saveFiles() {
       <li>
         <RouterLink
           to="/export"
+          :title="t('nav.export')"
           :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
         >
           <div class="i-ri-export-line" />
         </RouterLink>
       </li>
       <li>
-        <RouterLink to="/settings">
+        <RouterLink
+          to="/settings"
+          :title="t('nav.settings')"
+        >
           <div class="i-ri-settings-2-line" />
         </RouterLink>
       </li>
       <li>
         <div
+          :title="t('common.save')"
           :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
           @click="saveFiles"
         >

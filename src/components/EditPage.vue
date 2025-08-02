@@ -43,6 +43,8 @@ async function operateBatch() {
   else if (operation.value === 'normalize') {
     modifiedCnt.value = filesStore.normalizeFrontmatter(operateKey.value.split(',').map(str => str.trim()), operateValue.value, fileRegExp.value)
   }
+
+  await message(`成功修改了 ${modifiedCnt.value} 个文件的 frontmatter`, { title: '操作完成', kind: 'info' })
 }
 </script>
 

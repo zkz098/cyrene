@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "home": "Home",
+    "files": "Files",
+    "edit": "Edit",
+    "export": "Export",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "Frontmatter Editor",
+    "subtitle": "Edit and manage your markdown frontmatter",
+    "welcomeMessage": "Welcome to Frontmatter Editor",
+    "description": "A powerful tool for editing markdown file frontmatter",
+    "getStarted": "Select your articles folder to get started",
+    "openFiles": "Open Files",
+    "recentFiles": "Recent Files",
+    "noRecentFiles": "No recent files",
+    "instructionsStart": "Now you can start editing:",
+    "fileTreeInstruction": "The tree icon on the left is the file list, click to view and edit file content.",
+    "exportInstruction": "The export button can export all files to XLSX format or import all files' frontmatter from XLSX.",
+    "editInstruction": "The edit button can batch edit frontmatter fields.",
+    "settingsInstruction": "The settings button can configure some options, such as language.",
+    "saveInstruction": "The save button can save all modified files to the file system.",
+    "loadingMessage": "Please wait a moment, the file list is being prepared."
+  },
+  "files": {
+    "title": "File Explorer",
+    "selectFolder": "Select Folder",
+    "openFolder": "Open Folder",
+    "noFolder": "No folder selected",
+    "loading": "File tree loading...",
+    "loadingDescription": "Please wait a moment, the file tree is being prepared. For some large sites, this process may take several minutes or longer.",
+    "refresh": "Refresh",
+    "search": "Search files",
+    "noFiles": "No files found",
+    "fileTree": "File Tree",
+    "jsonPlaceholder": "Please enter JSON content...",
+    "saveToMemory": "Save current data to memory",
+    "defaultName": "This is the tree view interface",
+    "defaultDescription": "You can edit the frontmatter of specified documents on this page. Select a file from the left to start."
+  },
+  "edit": {
+    "title": "Edit File",
+    "selectFile": "Select a file to edit",
+    "fileName": "File Name",
+    "frontmatter": "Frontmatter",
+    "content": "Content",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "File saved successfully",
+    "error": "Error saving file",
+    "preview": "Preview",
+    "editMode": "Edit Mode",
+    "previewMode": "Preview Mode"
+  },
+  "export": {
+    "title": "Export Data",
+    "selectFormat": "Select Export Format",
+    "formats": {
+      "xlsx": "Excel (XLSX)",
+      "csv": "CSV",
+      "json": "JSON"
+    },
+    "exportAll": "Export All",
+    "exportSelected": "Export Selected",
+    "noData": "No data to export",
+    "success": "Export completed successfully",
+    "error": "Error during export",
+    "downloading": "Downloading..."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languages": {
+      "en": "English",
+      "zh": "中文"
+    },
+    "theme": "Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "auto": "Auto"
+    },
+    "editor": "Editor Settings",
+    "fontSize": "Font Size",
+    "tabSize": "Tab Size",
+    "wordWrap": "Word Wrap",
+    "lineNumbers": "Line Numbers",
+    "save": "Save Settings",
+    "reset": "Reset Article Directory",
+    "saved": "Settings saved successfully"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "open": "Open",
+    "save": "Save",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "confirmSave": "Your changes will be written to the file system immediately and cannot be undone. Do you want to continue?",
+    "saveSuccess": "All files have been saved successfully",
+    "saveError": "Some files failed to save, please check the logs"
+  }
+}
