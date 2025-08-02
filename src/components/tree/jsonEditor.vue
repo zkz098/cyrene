@@ -2,6 +2,17 @@
 import type { Highlighter } from 'shiki/bundle/web'
 import { createHighlighter } from 'shiki/bundle/web'
 import { nextTick, onMounted, ref, watch } from 'vue'
+import { useLanguage } from '../../composables/useLanguage'
+
+const props = withDefaults(defineProps<Props>(), {
+  readonly: false,
+  theme: 'github-light',
+  placeholder: '',
+})
+
+const emit = defineEmits<Emits>()
+
+const { t } = useLanguage()
 
 interface Props {
   modelValue: string
@@ -15,14 +26,6 @@ interface Emits {
   (e: 'change', value: string): void
   (e: 'error', error: string | null): void
 }
-
-const props = withDefaults(defineProps<Props>(), {
-  readonly: false,
-  theme: 'github-light',
-  placeholder: '请输入JSON内容...',
-})
-
-const emit = defineEmits<Emits>()
 
 const editorContainer = ref<HTMLDivElement>()
 const textArea = ref<HTMLTextAreaElement>()
@@ -166,14 +169,14 @@ watch(() => props.theme, updateHighlight)
     <!-- 工具栏 -->
     <div class="toolbar flex items-center justify-between border-b border-gray-200 p-2">
       <div class="flex items-center gap-2">
-        <span class="text-sm text-gray-700 font-medium">JSON编辑器</span>
+        <span class="text-sm text-gray-700 font-medium">{{ t('jsonEditor.title') }}</span>
         <button
           v-if="!readonly"
           class="rounded bg-blue-500 px-3 py-1 text-xs text-white transition-colors hover:bg-blue-600"
           :disabled="!!errorMessage"
           @click="formatJSON"
         >
-          格式化
+          {{ t('jsonEditor.format') }}
         </button>
       </div>
 
@@ -186,7 +189,7 @@ watch(() => props.theme, updateHighlight)
       <!-- 状态指示 -->
       <div v-else class="flex items-center gap-1 text-xs text-green-500">
         <span class="i-ri-check-line" />
-        有效的JSON
+        {{ t('jsonEditor.validJson') }}
       </div>
     </div>
 
@@ -208,7 +211,7 @@ watch(() => props.theme, updateHighlight)
         ref="textArea"
         :value="modelValue"
         :readonly="readonly"
-        :placeholder="placeholder"
+        :placeholder="placeholder || t('files.jsonPlaceholder')"
         class="textarea absolute inset-0 h-full w-full resize-none border-0 bg-transparent p-3 text-sm text-transparent leading-6 font-mono caret-black focus:outline-none"
         :class="{ 'cursor-not-allowed': readonly }"
         @input="handleInput"

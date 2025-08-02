@@ -39,6 +39,12 @@
     "defaultName": "This is the tree view interface",
     "defaultDescription": "You can edit the frontmatter of specified documents on this page. Select a file from the left to start."
   },
+  "jsonEditor": {
+    "title": "JSON Editor",
+    "format": "Format",
+    "validJson": "Valid JSON",
+    "invalidJson": "Invalid JSON format"
+  },
   "edit": {
     "title": "Edit File",
     "selectFile": "Select a file to edit",
@@ -51,7 +57,27 @@
     "error": "Error saving file",
     "preview": "Preview",
     "editMode": "Edit Mode",
-    "previewMode": "Preview Mode"
+    "previewMode": "Preview Mode",
+    "batchEdit": {
+      "title": "Batch Edit Workspace",
+      "loadingContent": "Reading and parsing frontmatter of all files",
+      "loadingDescription": "This process is done in parallel and usually doesn't take too long. If you have many files, it may take several minutes.",
+      "operation": "Operation to perform:",
+      "addField": "Add field",
+      "removeField": "Remove field",
+      "normalizeField": "Normalize field",
+      "fileRegexLabel": "Regular expression pattern for files to operate on (default for Markdown files):",
+      "operationContent": "Operation content:",
+      "fieldNameLabel": "Field name(s) to add, remove or normalize, separated by commas if multiple (e.g.: title, author):",
+      "addValueLabel": "Value to add",
+      "normalizeValueLabel": "Target value for normalization",
+      "executeButton": "Execute Batch Edit",
+      "fillFieldsError": "Please fill in the field name, file regex and target value",
+      "backupConfirm": "You are performing a batch edit operation, which may cause serious consequences if done incorrectly. Although your operations will not be immediately written to the file system, it is recommended to backup the current frontmatter to prevent difficulty in recovery after incorrect editing",
+      "backupTitle": "Backup Confirmation",
+      "operationComplete": "Operation Complete",
+      "modifiedFilesMessage": "Successfully modified frontmatter of {count} files"
+    }
   },
   "export": {
     "title": "Export Data",
@@ -66,7 +92,16 @@
     "noData": "No data to export",
     "success": "Export completed successfully",
     "error": "Error during export",
-    "downloading": "Downloading..."
+    "downloading": "Downloading...",
+    "importExport": {
+      "title": "Import & Export",
+      "loadingContent": "Reading and parsing frontmatter of all files",
+      "loadingDescription": "This process is done in parallel and usually doesn't take too long. If you have many files, it may take several minutes.",
+      "exportToXlsx": "Export to XLSX",
+      "importFromXlsx": "Import from XLSX",
+      "selectXlsxFile": "Please select the XLSX file to import",
+      "excelFiles": "Excel Files"
+    }
   },
   "settings": {
     "title": "Settings",

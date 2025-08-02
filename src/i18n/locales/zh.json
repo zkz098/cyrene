@@ -39,6 +39,12 @@
     "defaultName": "这是树形视图界面",
     "defaultDescription": "你可以在此页面内编辑指定文档的frontmatter，从左侧中选择一个文件以开始"
   },
+  "jsonEditor": {
+    "title": "JSON编辑器",
+    "format": "格式化",
+    "validJson": "有效的JSON",
+    "invalidJson": "无效的JSON格式"
+  },
   "edit": {
     "title": "编辑文件",
     "selectFile": "选择要编辑的文件",
@@ -51,7 +57,27 @@
     "error": "保存文件时出错",
     "preview": "预览",
     "editMode": "编辑模式",
-    "previewMode": "预览模式"
+    "previewMode": "预览模式",
+    "batchEdit": {
+      "title": "批量编辑工作台",
+      "loadingContent": "正在读取并解析所有文件的 frontmatter",
+      "loadingDescription": "此过程是并行进行的，通过不会花费太长时间。如果你有很多文件，可能需要几分钟时间。",
+      "operation": "要执行的操作：",
+      "addField": "添加字段",
+      "removeField": "删除字段",
+      "normalizeField": "归一化字段",
+      "fileRegexLabel": "需要进行操作的文件的正则表达式匹配（默认为 Markdown 文件）：",
+      "operationContent": "操作内容：",
+      "fieldNameLabel": "添加、删除或归一化的字段名，存在多个使用逗号分隔 (如：title, author)：",
+      "addValueLabel": "添加的字段值",
+      "normalizeValueLabel": "归一化的目标值",
+      "executeButton": "执行批量编辑",
+      "fillFieldsError": "请填写需要操作的字段名、文件正则和目标值",
+      "backupConfirm": "你正在进行批量编辑操作，操作错误可能导致严重的后果，尽管你进行的操作不会立刻写入到文件系统中，但建议备份当前的 frontmatter，以防止错误编辑后难以恢复",
+      "backupTitle": "备份确认",
+      "operationComplete": "操作完成",
+      "modifiedFilesMessage": "成功修改了 {count} 个文件的 frontmatter"
+    }
   },
   "export": {
     "title": "导出数据",
@@ -66,7 +92,16 @@
     "noData": "没有数据可导出",
     "success": "导出完成",
     "error": "导出时出错",
-    "downloading": "下载中..."
+    "downloading": "下载中...",
+    "importExport": {
+      "title": "导出与导入",
+      "loadingContent": "正在读取并解析所有文件的 frontmatter",
+      "loadingDescription": "此过程是并行进行的，通过不会花费太长时间。如果你有很多文件，可能需要几分钟时间。",
+      "exportToXlsx": "导出为 XLSX",
+      "importFromXlsx": "从 XLSX 导入",
+      "selectXlsxFile": "请选择要导入的 XLSX 文件",
+      "excelFiles": "Excel 文件"
+    }
   },
   "settings": {
     "title": "设置",

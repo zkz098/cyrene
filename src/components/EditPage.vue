@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ask, message } from '@tauri-apps/plugin-dialog'
 import { ref } from 'vue'
+import { useLanguage } from '../composables/useLanguage'
 import { useFilesStore } from '../stores/useFilesStore'
 import { exportToXLSX } from '../utils/exportToXLSX'
 import { readAndParseMultipleFrontmatter } from '../utils/tauri'
 
+const { t } = useLanguage()
 const filesStore = useFilesStore()
 
 if (!filesStore.ready.fileContent) {
@@ -23,11 +25,11 @@ const operateValue = ref('') // 操作的字段值
 
 async function operateBatch() {
   if (!operateKey.value || !fileRegExp.value || (operateKey.value === 'normalize' && !operateValue.value)) {
-    await message('请填写需要操作的字段名、文件正则和目标值', { title: '错误', kind: 'error' })
+    await message(t('edit.batchEdit.fillFieldsError'), { title: t('common.error'), kind: 'error' })
     return
   }
 
-  const isBackup = await ask(`你正在进行批量编辑操作，操作错误可能导致严重的后果，尽管你进行的操作不会立刻写入到文件系统中，但建议备份当前的 frontmatter，以防止错误编辑后难以恢复`, { title: '备份确认', kind: 'warning' })
+  const isBackup = await ask(t('edit.batchEdit.backupConfirm'), { title: t('edit.batchEdit.backupTitle'), kind: 'warning' })
   if (isBackup) {
     await exportToXLSX(useFilesStore())
   }
@@ -44,7 +46,7 @@ async function operateBatch() {
     modifiedCnt.value = filesStore.normalizeFrontmatter(operateKey.value.split(',').map(str => str.trim()), operateValue.value, fileRegExp.value)
   }
 
-  await message(`成功修改了 ${modifiedCnt.value} 个文件的 frontmatter`, { title: '操作完成', kind: 'info' })
+  await message(t('edit.batchEdit.modifiedFilesMessage', { count: modifiedCnt.value }), { title: t('edit.batchEdit.operationComplete'), kind: 'info' })
 }
 </script>
 
@@ -52,52 +54,51 @@ async function operateBatch() {
   <div>
     <div v-if="!filesStore.ready.fileContent">
       <h1 class="text-2xl">
-        正在读取并解析所有文件的 frontmatter
+        {{ t('edit.batchEdit.loadingContent') }}
       </h1>
       <p>
-        此过程是并行进行的，通过不会花费太长时间。<br>
-        如果你有很多文件，可能需要几分钟时间。<br>
+        {{ t('edit.batchEdit.loadingDescription') }}
       </p>
     </div>
     <div v-else class="flex flex-col items-start justify-start p-4">
       <h1 class="mb-6 text-2xl">
-        批量编辑工作台
+        {{ t('edit.batchEdit.title') }}
       </h1>
       <div class="flex flex-col items-start justify-start">
-        <span>要执行的操作：</span>
+        <span>{{ t('edit.batchEdit.operation') }}</span>
         <label>
           <input v-model="operation" type="radio" value="add">
-          添加字段
+          {{ t('edit.batchEdit.addField') }}
         </label>
         <label>
           <input v-model="operation" type="radio" value="remove">
-          删除字段
+          {{ t('edit.batchEdit.removeField') }}
         </label>
         <label>
           <input v-model="operation" type="radio" value="normalize">
-          归一化字段
+          {{ t('edit.batchEdit.normalizeField') }}
         </label>
       </div>
       <label>
-        需要进行操作的文件的正则表达式匹配（默认为 Markdown 文件）：<br>
+        {{ t('edit.batchEdit.fileRegexLabel') }}<br>
         <input v-model="fileRegExp" class="rounded" type="text">
       </label>
       <div class="flex flex-col items-start justify-start">
-        <span>操作内容：</span>
+        <span>{{ t('edit.batchEdit.operationContent') }}</span>
         <label>
-          添加、删除或归一化的字段名，存在多个使用逗号分隔 (如：title, author)：<br>
+          {{ t('edit.batchEdit.fieldNameLabel') }}<br>
           <input v-model="operateKey" class="rounded" type="text">
         </label>
         <label>
-          <span v-if="operation === 'add'">添加的字段值</span>
-          <span v-else-if="operation === 'normalize'">归一化的目标值</span>
+          <span v-if="operation === 'add'">{{ t('edit.batchEdit.addValueLabel') }}</span>
+          <span v-else-if="operation === 'normalize'">{{ t('edit.batchEdit.normalizeValueLabel') }}</span>
           <br>
           <input v-if="operation === 'add' || operation === 'normalize'" v-model="operateValue" type="text">
         </label>
       </div>
       <div>
         <button class="mt-4 rounded-xl bg-dark px-4 py-2 color-gray-100" @click="operateBatch">
-          执行批量编辑
+          {{ t('edit.batchEdit.executeButton') }}
         </button>
       </div>
     </div>

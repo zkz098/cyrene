@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { open } from '@tauri-apps/plugin-dialog'
+import { useLanguage } from '../composables/useLanguage'
 import { useFilesStore } from '../stores/useFilesStore'
 import { exportToXLSX } from '../utils/exportToXLSX'
 import { importFrontmatterFromXlsx, readAndParseMultipleFrontmatter } from '../utils/tauri'
 
+const { t } = useLanguage()
 const filesStore = useFilesStore()
 
 async function loadFilesFrontmatter() {
@@ -28,10 +30,10 @@ if (!filesStore.ready.fileContent) {
 
 async function importFromXLSX() {
   const selected = await open({
-    title: '请选择要导入的 XLSX 文件',
+    title: t('export.importExport.selectXlsxFile'),
     filters: [
       {
-        name: 'Excel 文件',
+        name: t('export.importExport.excelFiles'),
         extensions: ['xlsx'],
       },
     ],
@@ -54,22 +56,21 @@ async function importFromXLSX() {
   <div>
     <div v-if="!filesStore.ready.fileContent">
       <h1 class="text-2xl">
-        正在读取并解析所有文件的 frontmatter
+        {{ t('export.importExport.loadingContent') }}
       </h1>
       <p>
-        此过程是并行进行的，通过不会花费太长时间。<br>
-        如果你有很多文件，可能需要几分钟时间。<br>
+        {{ t('export.importExport.loadingDescription') }}
       </p>
     </div>
     <div v-else class="flex flex-col items-start justify-start p-4">
       <h1>
-        导出与导入
+        {{ t('export.importExport.title') }}
       </h1>
       <button class="mt-4 rounded-xl bg-dark px-4 py-2 color-gray-100" @click="() => exportToXLSX(useFilesStore())">
-        导出为 XLSX
+        {{ t('export.importExport.exportToXlsx') }}
       </button>
       <button class="mt-4 rounded-xl bg-dark px-4 py-2 color-gray-100" @click="importFromXLSX">
-        从 XLSX 导入
+        {{ t('export.importExport.importFromXlsx') }}
       </button>
     </div>
   </div>
