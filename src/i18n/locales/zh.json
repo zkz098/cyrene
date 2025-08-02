@@ -7,9 +7,9 @@
     "settings": "设置"
   },
   "home": {
-    "title": "前置元数据编辑器",
+    "title": "frontmatter-editor",
     "subtitle": "编辑和管理您的markdown前置元数据",
-    "welcomeMessage": "欢迎使用前置元数据编辑器",
+    "welcomeMessage": "欢迎使用 frontmatter-editor",
     "description": "一个强大的markdown文件前置元数据编辑工具",
     "getStarted": "选择你存储文章的文件夹以开始",
     "openFiles": "打开文件",
