@@ -12,7 +12,7 @@ type AHashIndexSet<T> = IndexSet<T, ahash::RandomState>;
 
 #[tauri::command]
 pub fn export_frontmatter_to_xlsx(
-    data: AHashIndexMap<String, AHashIndexMap<String, Value>>,
+    data: AHashHashMap<String, AHashIndexMap<String, Value>>,
     output_path: String,
 ) -> Result<String, String> {
     // 创建新的工作簿
