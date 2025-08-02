@@ -123,7 +123,16 @@
     "lineNumbers": "Line Numbers",
     "save": "Save Settings",
     "reset": "Reset Article Directory",
-    "saved": "Settings saved successfully"
+    "saved": "Settings saved successfully",
+    "update": {
+      "checkUpdate": "Check for Updates",
+      "downloadAndInstall": "Download and Install Update",
+      "newVersionFound": "New version found",
+      "updateContent": "Update content",
+      "downloading": "Downloading new version, progress",
+      "updateComplete": "Update completed, restart application automatically?",
+      "updateCompleteTitle": "Update Complete"
+    }
   },
   "common": {
     "ok": "OK",
