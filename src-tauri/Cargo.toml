@@ -1,9 +1,9 @@
 [package]
 name = "frontmatter-editor"
 version = "0.1.0"
-description = "A Tauri App"
-authors = [ "you" ]
-edition = "2021"
+description = "A Tauri application for editing frontmatter in Markdown files."
+authors = [ "zkz098" ]
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -33,6 +33,11 @@ rayon = "1.10.0"
 tauri-plugin-dialog = "2"
 umya-spreadsheet = "2.3.1"
 mimalloc = { version = "0.1", features = [ "override" ] }
+indexmap = { version = "2", features = [
+  "serde",
+  "rayon",
+  "std"
+] }
 
 [profile.release]
 opt-level = "z"

@@ -2,7 +2,6 @@ mod xlsx;
 mod write;
 
 use std::{
-    collections::HashMap,
     fs::File,
     io::{BufRead, BufReader, Error},
 };
@@ -10,6 +9,8 @@ use std::{
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use serde_yaml_ng::Value;
 use walkdir::WalkDir;
+
+use indexmap::{IndexMap};
 
 fn read_frontmatter(file_path: &str) -> Result<String, Error> {
     // todo:remove unwrap
@@ -36,8 +37,8 @@ fn read_frontmatter(file_path: &str) -> Result<String, Error> {
     Ok(res)
 }
 
-fn parse_yaml_frontmatter(content: &str) -> Result<HashMap<String, Value>, Error> {
-    let data = serde_yaml_ng::from_str::<HashMap<String, Value>>(content);
+fn parse_yaml_frontmatter(content: &str) -> Result<IndexMap<String, Value>, Error> {
+    let data = serde_yaml_ng::from_str::<IndexMap<String, Value>>(content);
     match data {
         Ok(parsed) => Ok(parsed),
         Err(e) => {
@@ -51,14 +52,14 @@ fn parse_yaml_frontmatter(content: &str) -> Result<HashMap<String, Value>, Error
 }
 
 #[tauri::command]
-fn read_and_parse_yaml_frontmatter(file_path: &str) -> HashMap<String, Value> {
+fn read_and_parse_yaml_frontmatter(file_path: &str) -> IndexMap<String, Value> {
     let content = read_frontmatter(file_path);
 
     match content {
-        Ok(content) => parse_yaml_frontmatter(&content).unwrap_or_else(|_| HashMap::new()),
+        Ok(content) => parse_yaml_frontmatter(&content).unwrap_or_else(|_| IndexMap::new()),
         Err(e) => {
             eprintln!("Error reading frontmatter: {}", e);
-            HashMap::new() // Return an empty map on error
+            IndexMap::new() // Return an empty map on error
         }
     }
 }
@@ -66,7 +67,7 @@ fn read_and_parse_yaml_frontmatter(file_path: &str) -> HashMap<String, Value> {
 #[tauri::command]
 fn read_and_parse_multiple_frontmatter(
     file_paths: Vec<&str>,
-) -> HashMap<String, HashMap<String, Value>> {
+) -> IndexMap<String, IndexMap<String, Value>> {
     file_paths
         .par_iter()
         .map(|&file_path| {

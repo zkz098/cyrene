@@ -1,11 +1,12 @@
 use std::{
-    collections::HashMap,
     fs::{File, OpenOptions},
     io::{BufRead, BufReader, Error, Write},
 };
 
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use serde_yaml_ng::Value;
+
+use indexmap::{IndexMap};
 
 fn write_frontmatter(file_path: &str, frontmatter_content: &str) -> Result<(), Error> {
     // 读取原文件内容
@@ -52,7 +53,7 @@ fn write_frontmatter(file_path: &str, frontmatter_content: &str) -> Result<(), E
     Ok(())
 }
 
-fn serialize_yaml_frontmatter(data: &HashMap<String, Value>) -> Result<String, Error> {
+fn serialize_yaml_frontmatter(data: &IndexMap<String, Value>) -> Result<String, Error> {
     match serde_yaml_ng::to_string(data) {
         Ok(yaml_string) => Ok(yaml_string),
         Err(e) => {
@@ -65,15 +66,15 @@ fn serialize_yaml_frontmatter(data: &HashMap<String, Value>) -> Result<String, E
     }
 }
 
-fn write_yaml_frontmatter(file_path: &str, data: &HashMap<String, Value>) -> Result<(), Error> {
+fn write_yaml_frontmatter(file_path: &str, data: &IndexMap<String, Value>) -> Result<(), Error> {
     let yaml_content = serialize_yaml_frontmatter(data)?;
     write_frontmatter(file_path, &yaml_content)
 }
 
 #[tauri::command]
 pub fn write_multiple_frontmatter(
-    file_data: HashMap<String, HashMap<String, Value>>,
-) -> HashMap<String, bool> {
+    file_data: IndexMap<String, IndexMap<String, Value>>,
+) -> IndexMap<String, bool> {
     file_data
         .par_iter()
         .map(|(file_path, frontmatter)| {
