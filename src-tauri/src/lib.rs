@@ -10,7 +10,10 @@ use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use serde_yaml_ng::Value;
 use walkdir::WalkDir;
 
-use indexmap::{IndexMap};
+use indexmap::IndexMap;
+
+// 使用ahash作为哈希器的类型别名
+type AHashIndexMap<K, V> = IndexMap<K, V, ahash::RandomState>;
 
 fn read_frontmatter(file_path: &str) -> Result<String, Error> {
     // todo:remove unwrap
@@ -37,8 +40,8 @@ fn read_frontmatter(file_path: &str) -> Result<String, Error> {
     Ok(res)
 }
 
-fn parse_yaml_frontmatter(content: &str) -> Result<IndexMap<String, Value>, Error> {
-    let data = serde_yaml_ng::from_str::<IndexMap<String, Value>>(content);
+fn parse_yaml_frontmatter(content: &str) -> Result<AHashIndexMap<String, Value>, Error> {
+    let data = serde_yaml_ng::from_str::<AHashIndexMap<String, Value>>(content);
     match data {
         Ok(parsed) => Ok(parsed),
         Err(e) => {
@@ -52,14 +55,14 @@ fn parse_yaml_frontmatter(content: &str) -> Result<IndexMap<String, Value>, Erro
 }
 
 #[tauri::command]
-fn read_and_parse_yaml_frontmatter(file_path: &str) -> IndexMap<String, Value> {
+fn read_and_parse_yaml_frontmatter(file_path: &str) -> AHashIndexMap<String, Value> {
     let content = read_frontmatter(file_path);
 
     match content {
-        Ok(content) => parse_yaml_frontmatter(&content).unwrap_or_else(|_| IndexMap::new()),
+        Ok(content) => parse_yaml_frontmatter(&content).unwrap_or_else(|_| AHashIndexMap::default()),
         Err(e) => {
             eprintln!("Error reading frontmatter: {}", e);
-            IndexMap::new() // Return an empty map on error
+            AHashIndexMap::default() // Return an empty map on error
         }
     }
 }
@@ -67,7 +70,7 @@ fn read_and_parse_yaml_frontmatter(file_path: &str) -> IndexMap<String, Value> {
 #[tauri::command]
 fn read_and_parse_multiple_frontmatter(
     file_paths: Vec<&str>,
-) -> IndexMap<String, IndexMap<String, Value>> {
+) -> AHashIndexMap<String, AHashIndexMap<String, Value>> {
     file_paths
         .par_iter()
         .map(|&file_path| {

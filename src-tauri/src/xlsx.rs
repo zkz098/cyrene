@@ -1,13 +1,18 @@
-use std::path::Path;
+use std::{collections::HashMap, path::Path};
 use serde_yaml_ng::Value;
 use umya_spreadsheet::*;
 use crate::write;
 
 use indexmap::{IndexMap, IndexSet};
 
+// 使用ahash作为哈希器的类型别名
+type AHashHashMap<K, V> = HashMap<K, V, ahash::RandomState>;
+type AHashIndexMap<K, V> = IndexMap<K, V, ahash::RandomState>;
+type AHashIndexSet<T> = IndexSet<T, ahash::RandomState>;
+
 #[tauri::command]
 pub fn export_frontmatter_to_xlsx(
-    data: IndexMap<String, IndexMap<String, Value>>,
+    data: AHashIndexMap<String, AHashIndexMap<String, Value>>,
     output_path: String,
 ) -> Result<String, String> {
     // 创建新的工作簿
@@ -20,7 +25,7 @@ pub fn export_frontmatter_to_xlsx(
     worksheet.get_cell_mut((1, 1)).set_value("");
     
     // 收集所有可能的字段名
-    let mut all_keys: IndexSet<String> = IndexSet::new();
+    let mut all_keys: AHashIndexSet<String> = AHashIndexSet::default();
     for frontmatter in data.values() {
         for key in frontmatter.keys() {
             all_keys.insert(key.clone());
@@ -29,7 +34,7 @@ pub fn export_frontmatter_to_xlsx(
     
     // 设置文件路径作为列标题
     let mut col_index = 2u32;
-    let mut path_to_col: IndexMap<String, u32> = IndexMap::new();
+    let mut path_to_col: AHashIndexMap<String, u32> = AHashIndexMap::default();
     for file_path in data.keys() {
         worksheet.get_cell_mut((1, col_index)).set_value(file_path);
         path_to_col.insert(file_path.clone(), col_index);
@@ -143,10 +148,10 @@ pub fn import_frontmatter_from_xlsx(
     }
     
     // 构建数据结构
-    let mut file_data: IndexMap<String, IndexMap<String, Value>> = IndexMap::new();
+    let mut file_data: AHashHashMap<String, AHashIndexMap<String, Value>> = AHashHashMap::default();
     
     for (col_idx, file_path) in file_paths.iter().enumerate() {
-        let mut frontmatter: IndexMap<String, Value> = IndexMap::new();
+        let mut frontmatter: AHashIndexMap<String, Value> = AHashIndexMap::default();
         
         for (row_idx, field_name) in field_names.iter().enumerate() {
             let actual_col = (col_idx + 2) as u32; // 从第2列开始

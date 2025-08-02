@@ -1179,6 +1179,7 @@ dependencies = [
 name = "frontmatter-editor"
 version = "0.1.0"
 dependencies = [
+ "ahash",
  "indexmap 2.10.0",
  "mimalloc",
  "num_cpus",
