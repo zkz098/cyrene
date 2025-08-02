@@ -7,9 +7,9 @@
     "settings": "Settings"
   },
   "home": {
-    "title": "Frontmatter Editor",
+    "title": "Cyrene",
     "subtitle": "Edit and manage your markdown frontmatter",
-    "welcomeMessage": "Welcome to Frontmatter Editor",
+    "welcomeMessage": "Welcome to Cyrene",
     "description": "A powerful tool for editing markdown file frontmatter",
     "getStarted": "Select your articles folder to get started",
     "openFiles": "Open Files",

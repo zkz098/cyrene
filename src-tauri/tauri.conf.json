@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "frontmatter-editor",
-  "version": "0.1.0",
-  "identifier": "com.frontmatter-editor.me",
+  "productName": "cyrene",
+  "version": "0.1.1",
+  "identifier": "com.cyrene.me",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -22,6 +22,7 @@
     }
   },
   "bundle": {
+    "createUpdaterArtifacts": true,
     "active": true,
     "targets": "all",
     "icon": [
@@ -31,5 +32,13 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDg5MDFFNURFMzMyRDEyOEEKUldTS0VpMHozdVVCaVVxSVV2ZDU1VDFlK1F3T2JiRXFGeHNPM1RYQk5CakZQeWk4MnRlemtxUHYK",
+      "endpoints": [
+        "https://github.com/zkz098/cyrene/releases/latest/download/latest.json"
+      ]
+    }
   }
 }

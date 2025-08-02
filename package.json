@@ -1,5 +1,5 @@
 {
-  "name": "frontmatter-editor",
+  "name": "cyrene",
   "type": "module",
   "version": "0.1.0",
   "private": true,
@@ -15,6 +15,7 @@
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-dialog": "~2.3.2",
     "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-updater": "~2.9.0",
     "pinia": "^3.0.3",
     "shiki": "^3.9.1",
     "vue": "^3.5.18",

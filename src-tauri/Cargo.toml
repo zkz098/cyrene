@@ -1,5 +1,5 @@
 [package]
-name = "frontmatter-editor"
+name = "cyrene"
 version = "0.1.0"
 description = "A Tauri application for editing frontmatter in Markdown files."
 authors = [ "zkz098" ]
@@ -48,3 +48,6 @@ debug = false
 panic = "abort"
 strip = true
 incremental = false
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"

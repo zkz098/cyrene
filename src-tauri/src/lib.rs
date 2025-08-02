@@ -1,5 +1,5 @@
-mod xlsx;
 mod write;
+mod xlsx;
 
 use std::{
     fs::File,
@@ -59,7 +59,9 @@ fn read_and_parse_yaml_frontmatter(file_path: &str) -> AHashIndexMap<String, Val
     let content = read_frontmatter(file_path);
 
     match content {
-        Ok(content) => parse_yaml_frontmatter(&content).unwrap_or_else(|_| AHashIndexMap::default()),
+        Ok(content) => {
+            parse_yaml_frontmatter(&content).unwrap_or_else(|_| AHashIndexMap::default())
+        }
         Err(e) => {
             eprintln!("Error reading frontmatter: {}", e);
             AHashIndexMap::default() // Return an empty map on error
@@ -100,6 +102,7 @@ fn get_all_files_of_dir(dir: &str) -> Vec<String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![

@@ -1,5 +1,7 @@
 use std::{
-    collections::HashMap, fs::{File, OpenOptions}, io::{BufRead, BufReader, Error, Write}
+    collections::HashMap,
+    fs::{File, OpenOptions},
+    io::{BufRead, BufReader, Error, Write},
 };
 
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
@@ -15,11 +17,11 @@ fn write_frontmatter(file_path: &str, frontmatter_content: &str) -> Result<(), E
     // 读取原文件内容
     let file = File::open(file_path)?;
     let reader = BufReader::new(file);
-    
+
     let mut frontmatter_started = false;
     let mut frontmatter_ended = false;
     let mut content_after_frontmatter = String::new();
-    
+
     // 跳过原有的frontmatter，保存后续内容
     for line_res in reader.lines() {
         let line = line_res?;
@@ -32,27 +34,27 @@ fn write_frontmatter(file_path: &str, frontmatter_content: &str) -> Result<(), E
                 continue;
             }
         }
-        
+
         if frontmatter_ended || !frontmatter_started {
             content_after_frontmatter.push_str(&line);
             content_after_frontmatter.push('\n');
         }
     }
-    
+
     // 写入新内容
     let mut file = OpenOptions::new()
         .write(true)
         .truncate(true)
         .open(file_path)?;
-    
+
     // 写入frontmatter
     writeln!(file, "---")?;
     write!(file, "{}", frontmatter_content)?;
     writeln!(file, "---")?;
-    
+
     // 写入原有内容
     write!(file, "{}", content_after_frontmatter)?;
-    
+
     Ok(())
 }
 
@@ -69,7 +71,10 @@ fn serialize_yaml_frontmatter(data: &AHashIndexMap<String, Value>) -> Result<Str
     }
 }
 
-fn write_yaml_frontmatter(file_path: &str, data: &AHashIndexMap<String, Value>) -> Result<(), Error> {
+fn write_yaml_frontmatter(
+    file_path: &str,
+    data: &AHashIndexMap<String, Value>,
+) -> Result<(), Error> {
     let yaml_content = serialize_yaml_frontmatter(data)?;
     write_frontmatter(file_path, &yaml_content)
 }

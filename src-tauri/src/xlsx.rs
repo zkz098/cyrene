@@ -1,7 +1,7 @@
-use std::{collections::HashMap, path::Path};
-use serde_yaml_ng::Value;
-use umya_spreadsheet::*;
 use crate::write;
+use serde_yaml_ng::Value;
+use std::{collections::HashMap, path::Path};
+use umya_spreadsheet::*;
 
 use indexmap::{IndexMap, IndexSet};
 
@@ -17,13 +17,13 @@ pub fn export_frontmatter_to_xlsx(
 ) -> Result<String, String> {
     // 创建新的工作簿
     let mut book = new_file();
-    
+
     // 获取第一个工作表
     let worksheet = book.get_sheet_mut(&0).unwrap();
-    
+
     // 设置第一个单元格为空（左上角）
     worksheet.get_cell_mut((1, 1)).set_value("");
-    
+
     // 收集所有可能的字段名
     let mut all_keys: AHashIndexSet<String> = AHashIndexSet::default();
     for frontmatter in data.values() {
@@ -31,7 +31,7 @@ pub fn export_frontmatter_to_xlsx(
             all_keys.insert(key.clone());
         }
     }
-    
+
     // 设置文件路径作为列标题
     let mut col_index = 2u32;
     let mut path_to_col: AHashIndexMap<String, u32> = AHashIndexMap::default();
@@ -40,13 +40,13 @@ pub fn export_frontmatter_to_xlsx(
         path_to_col.insert(file_path.clone(), col_index);
         col_index += 1;
     }
-    
+
     // 设置字段名作为行标题并填充数据
     let mut row_index = 2u32;
     for key in &all_keys {
         // 设置字段名作为行标题
         worksheet.get_cell_mut((row_index, 1)).set_value(key);
-        
+
         // 为每个文件填充该字段的值
         for (file_path, frontmatter) in &data {
             if let Some(&col) = path_to_col.get(file_path) {
@@ -62,25 +62,27 @@ pub fn export_frontmatter_to_xlsx(
                                 .map(|v| value_to_string(v))
                                 .collect::<Vec<String>>()
                                 .join(", ")
-                        },
+                        }
                         Value::Mapping(_) => {
                             // 将对象转换为JSON字符串
                             serde_yaml_ng::to_string(&value).unwrap_or_else(|_| "{}".to_string())
-                        },
+                        }
                         Value::Null => String::new(),
                         _ => format!("{:?}", value),
                     }
                 } else {
                     String::new() // 如果该文件没有这个字段，则为空
                 };
-                
-                worksheet.get_cell_mut((row_index, col)).set_value(&value_str);
+
+                worksheet
+                    .get_cell_mut((row_index, col))
+                    .set_value(&value_str);
             }
         }
-        
+
         row_index += 1;
     }
-    
+
     // 保存文件
     match writer::xlsx::write(&book, &output_path) {
         Ok(_) => Ok(format!("Excel文件已成功保存到: {}", output_path)),
@@ -98,10 +100,10 @@ pub fn import_frontmatter_from_xlsx(
         Ok(book) => book,
         Err(e) => return Err(format!("读取Excel文件时出错: {}", e)),
     };
-    
+
     // 获取第一个工作表
     let worksheet = book.get_sheet(&0).unwrap();
-    
+
     // 读取文件路径（第一行，从第2列开始）
     let mut file_paths: Vec<String> = Vec::new();
     let mut col_index = 2u32;
@@ -128,7 +130,7 @@ pub fn import_frontmatter_from_xlsx(
         }
         col_index += 1;
     }
-    
+
     // 读取字段名（第一列，从第2行开始）
     let mut field_names: Vec<String> = Vec::new();
     let mut row_index = 2u32;
@@ -146,17 +148,17 @@ pub fn import_frontmatter_from_xlsx(
         }
         row_index += 1;
     }
-    
+
     // 构建数据结构
     let mut file_data: AHashHashMap<String, AHashIndexMap<String, Value>> = AHashHashMap::default();
-    
+
     for (col_idx, file_path) in file_paths.iter().enumerate() {
         let mut frontmatter: AHashIndexMap<String, Value> = AHashIndexMap::default();
-        
+
         for (row_idx, field_name) in field_names.iter().enumerate() {
             let actual_col = (col_idx + 2) as u32; // 从第2列开始
             let actual_row = (row_idx + 2) as u32; // 从第2行开始
-            
+
             if let Some(cell) = worksheet.get_cell((actual_row, actual_col)) {
                 let cell_value = cell.get_value();
                 let value_str = cell_value.to_string();
@@ -167,20 +169,20 @@ pub fn import_frontmatter_from_xlsx(
                 }
             }
         }
-        
+
         if !frontmatter.is_empty() {
             file_data.insert(file_path.clone(), frontmatter);
         }
     }
-    
+
     // 使用write函数批量写入
     let write_results = write::write_multiple_frontmatter(file_data);
-    
+
     // 统计结果
     let total_files = write_results.len();
     let successful_files = write_results.values().filter(|&&success| success).count();
     let failed_files = total_files - successful_files;
-    
+
     if failed_files > 0 {
         Ok(format!(
             "导入完成：成功 {} 个文件，失败 {} 个文件",
@@ -200,7 +202,7 @@ fn parse_cell_value(value_str: &str) -> Value {
     if value_str.eq_ignore_ascii_case("false") {
         return Value::Bool(false);
     }
-    
+
     // 尝试解析为数字
     if let Ok(int_val) = value_str.parse::<i64>() {
         return Value::Number(serde_yaml_ng::Number::from(int_val));
@@ -208,7 +210,7 @@ fn parse_cell_value(value_str: &str) -> Value {
     if let Ok(float_val) = value_str.parse::<f64>() {
         return Value::Number(serde_yaml_ng::Number::from(float_val));
     }
-    
+
     // 检查是否是逗号分隔的数组
     if value_str.contains(", ") {
         let items: Vec<Value> = value_str
@@ -217,14 +219,14 @@ fn parse_cell_value(value_str: &str) -> Value {
             .collect();
         return Value::Sequence(items);
     }
-    
+
     // 尝试解析为YAML对象（如果以{开始）
     if value_str.starts_with('{') && value_str.ends_with('}') {
         if let Ok(parsed) = serde_yaml_ng::from_str::<Value>(value_str) {
             return parsed;
         }
     }
-    
+
     // 默认作为字符串处理
     Value::String(value_str.to_string())
 }

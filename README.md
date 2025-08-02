@@ -1,6 +1,4 @@
-# Frontmatter-editor
-
-已基本达到可用水准
+# Cyrene
 
 一个使用 Vue + Vite + Tauri 实现，用于批量编辑 markdown frontmatter 的工具
 
@@ -12,15 +10,11 @@
 
 ## 下载与安装
 
-还没有发行版，可通过 actions 下载工件来安装
+点击发行版，选择自己对应的架构和系统下载安装：
 
-目前构建了如下架构的版本：
-
-- Windows x64
-- Windows aarch64（ARM64）
-- Linux x64
-- MacOS x64 （Intel Mac）
-- MacOS aarch64（M1/2/3... 系列）
+- Windows 选择后缀名为 exe 和 msi 的，注意绝大多数人都应该下载 x64 架构的，aarch64 是 ARM 架构，目前 windows ARM 非常少见
+- MacOS 注意 Intel Mac 选 x64，M1/2/3...系列的选 aarch64
+- Linux 只有 x64 的版本，选择自己系统对应的包格式，不确定就用 AppImage
 
 ## 使用教程
 
@@ -134,3 +128,9 @@ C:
 本应用中所有向文件系统的保存操作均遵循“有效输出只对有效输入负责”原则，如果你的文件夹中本身存在 frontmatter 不完整、不存在 frontmatter 或多 frontmatter 的文件，则保存文件时会发生什么是完全未知的，无法保证源文件的完整
 
 **操作前务必备份好 Markdown 原始文件**
+
+## 其他内容
+
+### 名称来源
+
+项目名称来自于 [星铁的昔涟](https://wiki.biligame.com/sr/%E6%98%94%E6%B6%9F) 的英文名
