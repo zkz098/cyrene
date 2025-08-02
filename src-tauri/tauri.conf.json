@@ -22,6 +22,16 @@
     }
   },
   "bundle": {
+    "windows": {
+      "wix": {
+        "language": ["zh-CN", "zh-TW", "en-US"]
+      },
+      "nsis": {
+        "languages": ["SimpChinese","TradChinese", "English"],
+        "displayLanguageSelector": true,
+        "installMode": "both"
+      }
+    },
     "createUpdaterArtifacts": true,
     "active": true,
     "targets": "all",
