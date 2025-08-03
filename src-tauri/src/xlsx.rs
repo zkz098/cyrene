@@ -1,6 +1,6 @@
 use crate::write;
 use serde_yaml_ng::Value;
-use std::{collections::HashMap, path::Path};
+use std::{borrow::Cow, collections::HashMap, path::Path};
 use umya_spreadsheet::*;
 
 use indexmap::{IndexMap, IndexSet};
@@ -60,7 +60,7 @@ pub fn export_frontmatter_to_xlsx(
                             // 将数组转换为逗号分隔的字符串
                             seq.iter()
                                 .map(|v| value_to_string(v))
-                                .collect::<Vec<String>>()
+                                .collect::<Vec<Cow<str>>>()
                                 .join(", ")
                         }
                         Value::Mapping(_) => {
@@ -106,6 +106,7 @@ pub fn import_frontmatter_from_xlsx(
 
     // 读取文件路径（第一行，从第2列开始）
     let mut file_paths: Vec<String> = Vec::new();
+    file_paths.reserve(512);
     let mut col_index = 2u32;
     loop {
         if let Some(cell) = worksheet.get_cell((1, col_index)) {
@@ -130,6 +131,8 @@ pub fn import_frontmatter_from_xlsx(
         }
         col_index += 1;
     }
+
+    file_paths.shrink_to_fit();
 
     // 读取字段名（第一列，从第2行开始）
     let mut field_names: Vec<String> = Vec::new();
@@ -232,12 +235,13 @@ fn parse_cell_value(value_str: &str) -> Value {
 }
 
 // 辅助函数：将Value转换为字符串
-fn value_to_string(value: &Value) -> String {
+fn value_to_string(value: &Value) -> Cow<str> {
     match value {
-        Value::String(s) => s.clone(),
-        Value::Number(n) => n.to_string(),
-        Value::Bool(b) => b.to_string(),
-        Value::Null => String::new(),
-        _ => format!("{:?}", value),
+        Value::String(s) => Cow::Borrowed(s),
+        Value::Bool(true) => Cow::Borrowed("true"),
+        Value::Bool(false) => Cow::Borrowed("false"),
+        Value::Null => Cow::Borrowed(""),
+        Value::Number(n) => Cow::Owned(n.to_string()),
+        _ => Cow::Owned(format!("{:?}", value)),
     }
 }

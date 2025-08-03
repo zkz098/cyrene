@@ -89,6 +89,7 @@ fn get_file_ext(s: &str) -> Option<&str> {
 #[tauri::command]
 fn get_all_files_of_dir(dir: &str) -> Vec<String> {
     let mut md_files: Vec<String> = vec![];
+    md_files.reserve(512);
     for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
         if entry.file_type().is_file()
             && get_file_ext(entry.file_name().to_str().unwrap()) == Some("md")
@@ -96,6 +97,7 @@ fn get_all_files_of_dir(dir: &str) -> Vec<String> {
             md_files.push(entry.path().to_string_lossy().to_string());
         };
     }
+    md_files.shrink_to_fit();
     md_files
 }
 
