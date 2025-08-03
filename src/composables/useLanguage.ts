@@ -8,8 +8,8 @@ export function useLanguage() {
   const currentLanguage = computed(() => getCurrentLocale())
 
   const availableLanguages = [
-    { code: 'en', name: 'English' },
-    { code: 'zh', name: '中文' },
+    { code: 'en-US', name: 'English' },
+    { code: 'zh-CN', name: '中文' },
   ]
 
   function changeLanguage(language: string) {
