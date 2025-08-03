@@ -6,7 +6,8 @@
   "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "generate:shiki": "pnpm dlx shiki-codegen --themes github-light,github-dark --langs json,yaml,json5 ./src/shiki.bundle.ts",
+    "build": "pnpm generate:shiki && vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri"
   },
@@ -25,6 +26,11 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.1.0",
+    "@shikijs/core": "^3.9.1",
+    "@shikijs/engine-javascript": "^3.9.1",
+    "@shikijs/langs": "^3.9.1",
+    "@shikijs/themes": "^3.9.1",
+    "@shikijs/types": "^3.9.1",
     "@tauri-apps/cli": "^2",
     "@types/node": "^24.1.0",
     "@unocss/eslint-plugin": "^66.3.3",
@@ -36,5 +42,10 @@
     "unocss": "^66.3.3",
     "vite": "^7.0.6",
     "vue-tsc": "^3.0.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:rolldown-vite@latest"
+    }
   }
 }

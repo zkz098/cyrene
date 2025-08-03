@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Highlighter } from 'shiki/bundle/web'
-import { createHighlighter } from 'shiki/bundle/web'
+import type { Highlighter } from '../../shiki.bundle'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useLanguage } from '../../composables/useLanguage'
+import { createHighlighter } from '../../shiki.bundle'
 
 const props = withDefaults(defineProps<Props>(), {
   readonly: false,
