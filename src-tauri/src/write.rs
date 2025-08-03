@@ -1,3 +1,4 @@
+use crate::constants::*;
 use std::{
     collections::HashMap,
     fs::{File, OpenOptions},
@@ -25,7 +26,7 @@ fn write_frontmatter(file_path: &str, frontmatter_content: &str) -> Result<(), E
     // 跳过原有的frontmatter，保存后续内容
     for line_res in reader.lines() {
         let line = line_res?;
-        if line.starts_with("---") {
+        if line.starts_with(FRONTMATTER_DELIMITER) {
             if frontmatter_started && !frontmatter_ended {
                 frontmatter_ended = true;
                 continue;
@@ -48,9 +49,9 @@ fn write_frontmatter(file_path: &str, frontmatter_content: &str) -> Result<(), E
         .open(file_path)?;
 
     // 写入frontmatter
-    writeln!(file, "---")?;
+    writeln!(file, "{}", FRONTMATTER_DELIMITER)?;
     write!(file, "{}", frontmatter_content)?;
-    writeln!(file, "---")?;
+    writeln!(file, "{}", FRONTMATTER_DELIMITER)?;
 
     // 写入原有内容
     write!(file, "{}", content_after_frontmatter)?;

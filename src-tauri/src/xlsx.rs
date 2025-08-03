@@ -1,4 +1,4 @@
-use crate::write;
+use crate::{constants::*, write};
 use serde_yaml_ng::Value;
 use std::{borrow::Cow, collections::HashMap, path::Path};
 use umya_spreadsheet::*;
@@ -61,11 +61,11 @@ pub fn export_frontmatter_to_xlsx(
                             seq.iter()
                                 .map(|v| value_to_string(v))
                                 .collect::<Vec<Cow<str>>>()
-                                .join(", ")
+                                .join(COMMA_SEPARATOR)
                         }
                         Value::Mapping(_) => {
                             // 将对象转换为JSON字符串
-                            serde_yaml_ng::to_string(&value).unwrap_or_else(|_| "{}".to_string())
+                            serde_yaml_ng::to_string(&value).unwrap_or_else(|_| EMPTY_YAML_OBJECT.to_string())
                         }
                         Value::Null => String::new(),
                         _ => format!("{:?}", value),
@@ -85,8 +85,8 @@ pub fn export_frontmatter_to_xlsx(
 
     // 保存文件
     match writer::xlsx::write(&book, &output_path) {
-        Ok(_) => Ok(format!("Excel文件已成功保存到: {}", output_path)),
-        Err(e) => Err(format!("保存Excel文件时出错: {}", e)),
+        Ok(_) => Ok(format!("{}{}", SUCCESS_EXCEL_SAVE, output_path)),
+        Err(e) => Err(format!("{}{}", ERROR_EXCEL_SAVE, e)),
     }
 }
 
@@ -98,7 +98,7 @@ pub fn import_frontmatter_from_xlsx(
     // 读取XLSX文件
     let book = match reader::xlsx::read(&xlsx_path) {
         Ok(book) => book,
-        Err(e) => return Err(format!("读取Excel文件时出错: {}", e)),
+        Err(e) => return Err(format!("{}{}", ERROR_EXCEL_READ, e)),
     };
 
     // 获取第一个工作表
@@ -122,7 +122,7 @@ pub fn import_frontmatter_from_xlsx(
                     // 直接拼接相对路径
                     Path::new(&base_path).join(&path_str)
                 };
-                file_paths.push(full_path.to_string_lossy().to_string());
+                file_paths.push(full_path.to_string_lossy().into_owned());
             } else {
                 break;
             }
@@ -199,10 +199,10 @@ pub fn import_frontmatter_from_xlsx(
 // 辅助函数：解析单元格值为合适的YAML值类型
 fn parse_cell_value(value_str: &str) -> Value {
     // 尝试解析为布尔值
-    if value_str.eq_ignore_ascii_case("true") {
+    if TRUE_VALUES.contains(&value_str) {
         return Value::Bool(true);
     }
-    if value_str.eq_ignore_ascii_case("false") {
+    if FALSE_VALUES.contains(&value_str) {
         return Value::Bool(false);
     }
 
@@ -215,9 +215,9 @@ fn parse_cell_value(value_str: &str) -> Value {
     }
 
     // 检查是否是逗号分隔的数组
-    if value_str.contains(", ") {
+    if value_str.contains(COMMA_SEPARATOR) {
         let items: Vec<Value> = value_str
-            .split(", ")
+            .split(COMMA_SEPARATOR)
             .map(|s| parse_cell_value(s.trim()))
             .collect();
         return Value::Sequence(items);
@@ -231,7 +231,7 @@ fn parse_cell_value(value_str: &str) -> Value {
     }
 
     // 默认作为字符串处理
-    Value::String(value_str.to_string())
+    Value::String(value_str.to_owned())
 }
 
 // 辅助函数：将Value转换为字符串

@@ -1,6 +1,8 @@
+mod constants;
 mod write;
 mod xlsx;
 
+use crate::constants::*;
 use std::{
     fs::File,
     io::{BufRead, BufReader, Error},
@@ -24,7 +26,7 @@ fn read_frontmatter(file_path: &str) -> Result<String, Error> {
     let mut res = String::new();
     for line_res in reader.lines() {
         let line = line_res?;
-        if line.starts_with("---") {
+        if line.starts_with(FRONTMATTER_DELIMITER) {
             if frontmatter_started {
                 break; // End of frontmatter
             } else {
@@ -77,7 +79,7 @@ fn read_and_parse_multiple_frontmatter(
         .par_iter()
         .map(|&file_path| {
             let frontmatter = read_and_parse_yaml_frontmatter(file_path);
-            (file_path.to_string(), frontmatter)
+            (file_path.to_owned(), frontmatter)
         })
         .collect()
 }
@@ -88,13 +90,12 @@ fn get_file_ext(s: &str) -> Option<&str> {
 
 #[tauri::command]
 fn get_all_files_of_dir(dir: &str) -> Vec<String> {
-    let mut md_files: Vec<String> = vec![];
-    md_files.reserve(512);
+    let mut md_files: Vec<String> = Vec::new();
     for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
         if entry.file_type().is_file()
-            && get_file_ext(entry.file_name().to_str().unwrap()) == Some("md")
+            && get_file_ext(entry.file_name().to_str().unwrap()) == Some(MD_EXTENSION)
         {
-            md_files.push(entry.path().to_string_lossy().to_string());
+            md_files.push(entry.path().to_string_lossy().into_owned());
         };
     }
     md_files.shrink_to_fit();
