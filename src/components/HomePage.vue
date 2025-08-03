@@ -24,6 +24,7 @@ async function selectFolder() {
   }
 
   (await getAllFilesOfDir(folderPath.value)).forEach((temp) => {
+    temp = temp.replace(/\\/g, '/') // 替换反斜杠为正斜杠
     filesStore.files[temp] = {
       relativePath: getRelativePath(temp, folderPath.value),
       frontmatter: {},

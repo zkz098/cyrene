@@ -25,7 +25,7 @@ export const useFilesStore = defineStore('files', {
       return Object.values(this.files).map(file => file.relativePath)
     },
     setCurrentAccessPath(relativePath: string) {
-      this.currentAccessPath = this.basePath + relativePath
+      this.currentAccessPath = (this.basePath + relativePath).replace(/\\/g, '/')
     },
     addKeyValueToFrontmatter(keys: string[], value: unknown, regexp: RegExp) {
       let modifiedCnt = 0

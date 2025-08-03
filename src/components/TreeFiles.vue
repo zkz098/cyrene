@@ -21,7 +21,7 @@ const jsonContent = ref('')
 
 watch(() => filesStore.currentAccessPath, async (newPath) => {
   if (newPath) {
-    if (filesStore.files[newPath]?.frontmatter) {
+    if (filesStore.files[newPath]?.frontmatter && Object.keys(filesStore.files[newPath].frontmatter).length > 0) {
       jsonContent.value = JSON.stringify(filesStore.files[newPath].frontmatter, null, 2)
     }
     else {
