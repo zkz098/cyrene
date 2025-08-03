@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "cyrene",
-  "version": "0.1.1",
-  "identifier": "com.cyrene.me",
+  "version": "0.1.2",
+  "identifier": "com.zkz098.cyrene",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -24,10 +24,10 @@
   "bundle": {
     "windows": {
       "wix": {
-        "language": ["zh-CN", "zh-TW", "en-US"]
+        "language": ["zh-CN", "en-US"]
       },
       "nsis": {
-        "languages": ["SimpChinese","TradChinese", "English"],
+        "languages": ["SimpChinese", "English"],
         "displayLanguageSelector": true,
         "installMode": "both"
       }
