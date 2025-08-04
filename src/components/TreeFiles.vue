@@ -6,6 +6,7 @@ import { buildFileTree } from '../utils/buildFileTree'
 
 import { getRelativePath } from '../utils/getRelativePath'
 import { readAndParseYamlFrontmatter } from '../utils/tauri'
+import Button from './basic/Button.vue'
 import JsonEditor from './tree/jsonEditor.vue'
 import TreeNode from './tree/TreeNode.vue'
 
@@ -63,9 +64,9 @@ watch(() => filesStore.currentAccessPath, async (newPath) => {
           theme="github-light"
           :placeholder="t('files.jsonPlaceholder')"
         />
-        <button class="m-2 mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" @click="filesStore.files[filesStore.currentAccessPath].frontmatter = JSON.parse(jsonContent)">
+        <Button class="m-2 mt-2" @click="filesStore.files[filesStore.currentAccessPath].frontmatter = JSON.parse(jsonContent)">
           {{ t('files.saveToMemory') }}
-        </button>
+        </Button>
       </div>
     </div>
   </div>

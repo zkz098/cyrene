@@ -6,6 +6,8 @@ import { useFilesStore } from '../stores/useFilesStore'
 import { exportToXLSX } from '../utils/exportToXLSX'
 import { readAndParseMultipleFrontmatter } from '../utils/tauri'
 
+import Button from './basic/Button.vue'
+
 const { t } = useLanguage()
 const filesStore = useFilesStore()
 
@@ -97,9 +99,9 @@ async function operateBatch() {
         </label>
       </div>
       <div>
-        <button class="mt-4 rounded-xl bg-dark px-4 py-2 color-gray-100" @click="operateBatch">
+        <Button class="my-4" @click="operateBatch">
           {{ t('edit.batchEdit.executeButton') }}
-        </button>
+        </Button>
       </div>
     </div>
   </div>

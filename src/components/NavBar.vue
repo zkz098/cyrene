@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ask, message } from '@tauri-apps/plugin-dialog'
 import { useI18n } from 'vue-i18n'
-import { useFilesStore } from './stores/useFilesStore'
-import { writeMultipleFrontmatter } from './utils/tauri'
+import { useFilesStore } from '../stores/useFilesStore'
+import { writeMultipleFrontmatter } from '../utils/tauri'
+import NavItem from './navbar/NavItem.vue'
 
 const { t } = useI18n()
 const filesStore = useFilesStore()
@@ -34,56 +35,51 @@ async function saveFiles() {
   <nav>
     <ul class="m-0 h-90vh flex flex-col list-none items-center justify-start gap-8 rounded-2xl bg-gray-100 p-4 pt-8 text-8 color-gray-700">
       <li>
-        <RouterLink
+        <NavItem
           to="/"
           :title="t('nav.home')"
-        >
-          <div class="i-ri-home-line" />
-        </RouterLink>
+          icon="i-ri-home-line"
+        />
       </li>
       <li>
-        <RouterLink
+        <NavItem
           to="/files"
           :title="t('nav.files')"
-          :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
-        >
-          <div class="i-ri-node-tree" />
-        </RouterLink>
+          :disabled="!filesStore.ready.fileList"
+          icon="i-ri-node-tree"
+        />
       </li>
       <li>
-        <RouterLink
+        <NavItem
           to="/edit"
           :title="t('nav.edit')"
-          :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
-        >
-          <div class="i-ri-edit-box-line" />
-        </RouterLink>
+          :disabled="!filesStore.ready.fileList"
+          icon="i-ri-edit-box-line"
+        />
       </li>
       <li>
-        <RouterLink
+        <NavItem
           to="/export"
           :title="t('nav.export')"
-          :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
-        >
-          <div class="i-ri-export-line" />
-        </RouterLink>
+          :disabled="!filesStore.ready.fileList"
+          icon="i-ri-export-line"
+        />
       </li>
       <li>
-        <RouterLink
+        <NavItem
           to="/settings"
           :title="t('nav.settings')"
-        >
-          <div class="i-ri-settings-2-line" />
-        </RouterLink>
+          icon="i-ri-settings-2-line"
+        />
       </li>
       <li>
-        <div
+        <NavItem
+          to="#"
           :title="t('common.save')"
-          :class="{ 'pointer-events-none opacity-50': !filesStore.ready.fileList }"
+          :disabled="!filesStore.ready.fileList"
+          icon="i-ri-save-2-line"
           @click="saveFiles"
-        >
-          <div class="i-ri-save-2-line" />
-        </div>
+        />
       </li>
     </ul>
   </nav>

@@ -3,6 +3,7 @@ import type { Highlighter } from '../../shiki.bundle'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useLanguage } from '../../composables/useLanguage'
 import { createHighlighter } from '../../shiki.bundle'
+import Button from '../basic/Button.vue'
 
 const props = withDefaults(defineProps<Props>(), {
   readonly: false,
@@ -170,14 +171,14 @@ watch(() => props.theme, updateHighlight)
     <div class="toolbar flex items-center justify-between border-b border-gray-200 p-2">
       <div class="flex items-center gap-2">
         <span class="text-sm text-gray-700 font-medium">{{ t('jsonEditor.title') }}</span>
-        <button
+        <Button
           v-if="!readonly"
-          class="rounded bg-blue-500 px-3 py-1 text-xs text-white transition-colors hover:bg-blue-600"
+          class="px-3 py-1 text-xs"
           :disabled="!!errorMessage"
           @click="formatJSON"
         >
           {{ t('jsonEditor.format') }}
-        </button>
+        </Button>
       </div>
 
       <!-- 错误信息 -->

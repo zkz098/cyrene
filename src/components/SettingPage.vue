@@ -6,6 +6,7 @@ import { check } from '@tauri-apps/plugin-updater'
 import { ref } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useFilesStore } from '../stores/useFilesStore'
+import Button from './basic/Button.vue'
 
 const { t, currentLanguage, availableLanguages, changeLanguage } = useLanguage()
 const filesStore = useFilesStore()
@@ -77,10 +78,10 @@ async function downloadAndInstallUpdate() {
         {{ t('settings.language') }}
       </h2>
       <div class="flex gap-2">
-        <button
+        <Button
           v-for="lang in availableLanguages"
           :key="lang.code"
-          class="border rounded px-4 py-2 transition-colors"
+          class="border transition-colors"
           :class="[
             currentLanguage === lang.code
               ? 'border-blue-500 bg-blue-500 text-white'
@@ -89,7 +90,7 @@ async function downloadAndInstallUpdate() {
           @click="changeLanguage(lang.code)"
         >
           {{ lang.name }}
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -98,24 +99,24 @@ async function downloadAndInstallUpdate() {
       <h2 class="mb-3 text-lg">
         {{ t('files.title') }}
       </h2>
-      <button
-        class="rounded bg-gray-700 px-4 py-2 text-white transition-colors hover:bg-gray-800"
+      <Button
+        class="bg-gray-700 text-white transition-colors hover:bg-gray-800"
         @click="resetFolder"
       >
         {{ t('settings.reset') }}
-      </button>
+      </Button>
     </div>
     <hr class="my-1 w-full border-t-1 border-t-gray-400 border-none border-t-solid">
     <div class="flex flex-col items-start justify-start gap-2">
-      <button
-        class="rounded bg-gray-700 px-4 py-2 text-white transition-colors hover:bg-gray-800"
+      <Button
+        class="bg-gray-700 text-white transition-colors hover:bg-gray-800"
         @click="checkUpdate"
       >
         {{ t('settings.update.checkUpdate') }}
-      </button>
-      <button class="cursor-not-allowed rounded bg-gray-700 px-4 py-2 text-white transition-colors disabled:bg-gray-300 hover:bg-gray-800 disabled:hover:bg-gray-300" :disabled="!needUpdate" @click="downloadAndInstallUpdate">
+      </Button>
+      <Button class="cursor-not-allowed bg-gray-700 text-white transition-colors disabled:bg-gray-300 hover:bg-gray-800 disabled:hover:bg-gray-300" :disabled="!needUpdate" @click="downloadAndInstallUpdate">
         {{ t('settings.update.downloadAndInstall') }}
-      </button>
+      </Button>
     </div>
 
     <div v-if="needUpdate && updateRes" class="flex flex-col items-start justify-start gap-2">

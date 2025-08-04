@@ -4,6 +4,7 @@ import { useLanguage } from '../composables/useLanguage'
 import { useFilesStore } from '../stores/useFilesStore'
 import { exportToXLSX } from '../utils/exportToXLSX'
 import { importFrontmatterFromXlsx, readAndParseMultipleFrontmatter } from '../utils/tauri'
+import Button from './basic/Button.vue'
 
 const { t } = useLanguage()
 const filesStore = useFilesStore()
@@ -66,12 +67,12 @@ async function importFromXLSX() {
       <h1>
         {{ t('export.importExport.title') }}
       </h1>
-      <button class="mt-4 rounded-xl bg-dark px-4 py-2 color-gray-100" @click="() => exportToXLSX(useFilesStore())">
+      <Button class="mt-4 bg-green-6 hover:bg-green-7" @click="() => exportToXLSX(useFilesStore())">
         {{ t('export.importExport.exportToXlsx') }}
-      </button>
-      <button class="mt-4 rounded-xl bg-dark px-4 py-2 color-gray-100" @click="importFromXLSX">
+      </Button>
+      <Button class="mt-4 bg-green-6 hover:bg-green-7" @click="importFromXLSX">
         {{ t('export.importExport.importFromXlsx') }}
-      </button>
+      </Button>
     </div>
   </div>
 </template>

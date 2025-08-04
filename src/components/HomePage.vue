@@ -6,6 +6,8 @@ import { useFilesStore } from '../stores/useFilesStore'
 import { getRelativePath } from '../utils/getRelativePath'
 import { getAllFilesOfDir } from '../utils/tauri'
 
+import Button from './basic/Button.vue'
+
 const { t } = useI18n()
 const folderPath = ref('')
 const filesStore = useFilesStore()
@@ -44,12 +46,9 @@ async function selectFolder() {
         {{ t('home.description') }}
       </p>
 
-      <button
-        class="mt-4 rounded-xl bg-gray-700 px-4 py-2 text-white transition-colors hover:bg-gray-800"
-        @click="selectFolder"
-      >
+      <Button @click="selectFolder">
         {{ t('home.getStarted') }}
-      </button>
+      </Button>
     </div>
 
     <div v-else-if="filesStore.ready.fileList" class="flex flex-col items-center justify-center p-4">
