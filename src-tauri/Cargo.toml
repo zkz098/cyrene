@@ -1,6 +1,6 @@
 [package]
 name = "cyrene"
-version = "0.1.0"
+version = "0.1.3"
 description = "A Tauri application for editing frontmatter in Markdown files."
 authors = [ "zkz098" ]
 edition = "2024"
