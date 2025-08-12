@@ -6,6 +6,8 @@ import NavBar from './components/NavBar.vue'
   <div class="flex flex-row overflow-hidden">
     <NavBar class="w-20 flex-shrink-0 lg:w-16" />
 
-    <RouterView class="flex-1 overflow-x-hidden overflow-y-scroll" />
+    <div class="w-full flex-1 overflow-x-hidden overflow-y-scroll">
+      <RouterView />
+    </div>
   </div>
 </template>

@@ -100,7 +100,9 @@
       "exportToXlsx": "导出为 XLSX",
       "importFromXlsx": "从 XLSX 导入",
       "selectXlsxFile": "请选择要导入的 XLSX 文件",
-      "excelFiles": "Excel 文件"
+      "excelFiles": "Excel 文件",
+      "backupSuccess": "备份已成功完成",
+      "backup": "备份当前的所有文件"
     }
   },
   "settings": {

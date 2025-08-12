@@ -173,7 +173,7 @@ watch(() => props.theme, updateHighlight)
         <span class="text-sm text-gray-700 font-medium">{{ t('jsonEditor.title') }}</span>
         <Button
           v-if="!readonly"
-          class="px-3 py-1 text-xs"
+          class="bg-blue-500 px-3 py-1 text-xs hover:bg-blue-600"
           :disabled="!!errorMessage"
           @click="formatJSON"
         >

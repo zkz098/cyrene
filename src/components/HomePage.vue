@@ -46,7 +46,7 @@ async function selectFolder() {
         {{ t('home.description') }}
       </p>
 
-      <Button @click="selectFolder">
+      <Button class="bg-blue-500 hover:bg-blue-600" @click="selectFolder">
         {{ t('home.getStarted') }}
       </Button>
     </div>

@@ -7,21 +7,13 @@ import { ref } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useFilesStore } from '../stores/useFilesStore'
 import Button from './basic/Button.vue'
+import Divider from './basic/Divider.vue'
 
 const { t, currentLanguage, availableLanguages, changeLanguage } = useLanguage()
 const filesStore = useFilesStore()
 
 function resetFolder() {
-  filesStore.ready.fileTree = false
-  filesStore.filetree = []
-  filesStore.files = {}
-  filesStore.currentAccessPath = ''
-  filesStore.basePath = ''
-  filesStore.ready.fileList = false
-  filesStore.ready.fileTree = false
-  filesStore.ready.fileContent = false
-  filesStore.ready.selectedFile = false
-  filesStore.ready.xlsxExporting = false
+  filesStore.$reset()
 }
 
 const needUpdate = ref(false)
@@ -106,7 +98,7 @@ async function downloadAndInstallUpdate() {
         {{ t('settings.reset') }}
       </Button>
     </div>
-    <hr class="my-1 w-full border-t-1 border-t-gray-400 border-none border-t-solid">
+    <Divider />
     <div class="flex flex-col items-start justify-start gap-2">
       <Button
         class="bg-gray-700 text-white transition-colors hover:bg-gray-800"

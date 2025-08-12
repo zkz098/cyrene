@@ -99,7 +99,7 @@ async function operateBatch() {
         </label>
       </div>
       <div>
-        <Button class="my-4" @click="operateBatch">
+        <Button class="my-4 bg-blue-500 hover:bg-blue-600" @click="operateBatch">
           {{ t('edit.batchEdit.executeButton') }}
         </Button>
       </div>

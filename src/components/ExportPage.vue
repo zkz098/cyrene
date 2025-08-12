@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { open } from '@tauri-apps/plugin-dialog'
+import { message, open, save } from '@tauri-apps/plugin-dialog'
 import { useLanguage } from '../composables/useLanguage'
 import { useFilesStore } from '../stores/useFilesStore'
 import { exportToXLSX } from '../utils/exportToXLSX'
-import { importFrontmatterFromXlsx, readAndParseMultipleFrontmatter } from '../utils/tauri'
+import { backupFilesAsTarZst, importFrontmatterFromXlsx, readAndParseMultipleFrontmatter } from '../utils/tauri'
 import Button from './basic/Button.vue'
+import Divider from './basic/Divider.vue'
 
 const { t } = useLanguage()
 const filesStore = useFilesStore()
@@ -51,6 +52,24 @@ async function importFromXLSX() {
     filesStore.ready.fileContent = true
   }
 }
+
+async function backupFiles() {
+  const selected = await save({
+    title: '请选择备份文件的保存位置',
+    filters: [
+      {
+        name: 'Zstd 压缩文件',
+        extensions: ['zst'],
+      },
+    ],
+    defaultPath: `backup-${new Date().toISOString().split('T')[0]}.tar.zst`,
+  })
+
+  if (selected) {
+    await backupFilesAsTarZst(filesStore.getFileRelativePathList(), filesStore.basePath, selected, 3)
+    await message(t('export.importExport.backupSuccess', { file: selected }))
+  }
+}
 </script>
 
 <template>
@@ -72,6 +91,12 @@ async function importFromXLSX() {
       </Button>
       <Button class="mt-4 bg-green-6 hover:bg-green-7" @click="importFromXLSX">
         {{ t('export.importExport.importFromXlsx') }}
+      </Button>
+
+      <Divider />
+
+      <Button class="mt-4 bg-amber-4 hover:bg-amber-5" @click="backupFiles">
+        {{ t('export.importExport.backup') }}
       </Button>
     </div>
   </div>

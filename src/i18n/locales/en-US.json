@@ -100,7 +100,8 @@
       "exportToXlsx": "Export to XLSX",
       "importFromXlsx": "Import from XLSX",
       "selectXlsxFile": "Please select the XLSX file to import",
-      "excelFiles": "Excel Files"
+      "excelFiles": "Excel Files",
+      "backupSuccess": ""
     }
   },
   "settings": {

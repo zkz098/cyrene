@@ -65,7 +65,8 @@ pub fn export_frontmatter_to_xlsx(
                         }
                         Value::Mapping(_) => {
                             // 将对象转换为JSON字符串
-                            serde_yaml_ng::to_string(&value).unwrap_or_else(|_| EMPTY_YAML_OBJECT.to_string())
+                            serde_yaml_ng::to_string(&value)
+                                .unwrap_or_else(|_| EMPTY_YAML_OBJECT.to_string())
                         }
                         Value::Null => String::new(),
                         _ => format!("{:?}", value),

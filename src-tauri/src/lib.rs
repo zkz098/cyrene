@@ -1,3 +1,4 @@
+mod backup;
 mod constants;
 mod write;
 mod xlsx;
@@ -105,6 +106,7 @@ fn get_all_files_of_dir(dir: &str) -> Vec<String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
@@ -115,7 +117,9 @@ pub fn run() {
             get_all_files_of_dir,
             xlsx::export_frontmatter_to_xlsx,
             xlsx::import_frontmatter_from_xlsx,
-            write::write_multiple_frontmatter
+            write::write_multiple_frontmatter,
+            backup::backup_files_as_tar_zst,
+            backup::restore_files_from_tar_zst,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

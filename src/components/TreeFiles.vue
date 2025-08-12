@@ -64,7 +64,7 @@ watch(() => filesStore.currentAccessPath, async (newPath) => {
           theme="github-light"
           :placeholder="t('files.jsonPlaceholder')"
         />
-        <Button class="m-2 mt-2" @click="filesStore.files[filesStore.currentAccessPath].frontmatter = JSON.parse(jsonContent)">
+        <Button class="m-2 mt-2 bg-blue-500 hover:bg-blue-600" @click="filesStore.files[filesStore.currentAccessPath].frontmatter = JSON.parse(jsonContent)">
           {{ t('files.saveToMemory') }}
         </Button>
       </div>
