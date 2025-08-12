@@ -3,7 +3,7 @@ import { message, open, save } from '@tauri-apps/plugin-dialog'
 import { useLanguage } from '../composables/useLanguage'
 import { useFilesStore } from '../stores/useFilesStore'
 import { exportToXLSX } from '../utils/exportToXLSX'
-import { backupFilesAsTarZst, importFrontmatterFromXlsx, readAndParseMultipleFrontmatter } from '../utils/tauri'
+import { backupFilesAsTarZst, importFrontmatterFromXlsx, readAndParseMultipleFrontmatter, restoreFilesFromTarZst } from '../utils/tauri'
 import Button from './basic/Button.vue'
 import Divider from './basic/Divider.vue'
 
@@ -70,6 +70,33 @@ async function backupFiles() {
     await message(t('export.importExport.backupSuccess', { file: selected }))
   }
 }
+
+async function restoreFiles() {
+  const selected = await open({
+    title: t('export.importExport.selectRestoreFile'),
+    filters: [
+      {
+        name: 'Zstd 压缩文件',
+        extensions: ['zst'],
+      },
+    ],
+  })
+
+  if (selected) {
+    const result = await restoreFilesFromTarZst(selected, filesStore.basePath)
+
+    if (result.success_count > 0) {
+      await message(t('export.importExport.restoreSuccess', { count: result.success_count }))
+    }
+    if (result.failed_count > 0) {
+      await message(t('export.importExport.restoreFailed', { count: result.failed_count, files: result.failed_files.join(', ') }))
+    }
+
+    // 重新加载文件内容
+    filesStore.ready.fileContent = false
+    await loadFilesFrontmatter()
+  }
+}
 </script>
 
 <template>
@@ -97,6 +124,9 @@ async function backupFiles() {
 
       <Button class="mt-4 bg-amber-4 hover:bg-amber-5" @click="backupFiles">
         {{ t('export.importExport.backup') }}
+      </Button>
+      <Button class="mt-4 bg-amber-4 hover:bg-amber-5" @click="restoreFiles">
+        {{ t('export.importExport.restore') }}
       </Button>
     </div>
   </div>

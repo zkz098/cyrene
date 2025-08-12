@@ -101,7 +101,12 @@
       "importFromXlsx": "Import from XLSX",
       "selectXlsxFile": "Please select the XLSX file to import",
       "excelFiles": "Excel Files",
-      "backupSuccess": ""
+      "backupSuccess": "Backup completed successfully to {file}",
+      "backup": "Backup all current files",
+      "restore": "Restore files from backup",
+      "selectRestoreFile": "Please select the backup file to restore",
+      "restoreSuccess": "Successfully restored {count} files",
+      "restoreFailed": "Failed to restore {count} files: {files}"
     }
   },
   "settings": {

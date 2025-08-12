@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use sha2::{Digest, Sha256};
 use std::{
     collections::HashMap,
@@ -7,6 +8,16 @@ use std::{
 };
 
 type AHashHashMap<K, V> = HashMap<K, V, ahash::RandomState>;
+
+// 规范化相对路径的辅助函数
+fn normalize_path(rel_path: &str) -> String {
+    if rel_path.starts_with('/') || rel_path.starts_with('\\') {
+        // 如果路径以 / 或 \ 开头，去掉开头的分隔符
+        rel_path.trim_start_matches(['/', '\\']).to_string()
+    } else {
+        rel_path.to_string()
+    }
+}
 
 #[tauri::command]
 pub fn backup_files_as_tar_zst(
@@ -24,23 +35,29 @@ pub fn backup_files_as_tar_zst(
     let encoder = zstd::stream::Encoder::new(buf_writer, zstd_level).map_err(|e| e.to_string())?;
     let mut tar_builder = tar::Builder::new(encoder);
 
+    // 并行计算所有文件的哈希值
+    let hash_results: Result<Vec<(String, String)>, String> = file_list
+        .par_iter()
+        .map(|rel_path| {
+            let normalized_rel_path = normalize_path(rel_path);
+            let full_path = base_dir.join(&normalized_rel_path);
+            let hash = calculate_sha256(&full_path)?;
+            Ok((normalized_rel_path, hash))
+        })
+        .collect();
+
+    let hash_results = hash_results?;
+    
+    // 将结果收集到 HashMap
     let mut file_hashes: AHashHashMap<String, String> = AHashHashMap::default();
+    for (path, hash) in hash_results {
+        file_hashes.insert(path, hash);
+    }
 
+    // 串行添加文件到 tar 归档（tar 格式要求顺序写入）
     for rel_path in &file_list {
-        // 规范化相对路径，确保它是相对路径
-        let normalized_rel_path = if rel_path.starts_with('/') || rel_path.starts_with('\\') {
-            // 如果路径以 / 或 \ 开头，去掉开头的分隔符
-            rel_path.trim_start_matches(['/', '\\']).to_string()
-        } else {
-            rel_path.clone()
-        };
-
-        // 构建完整路径用于读取文件
+        let normalized_rel_path = normalize_path(rel_path);
         let full_path = base_dir.join(&normalized_rel_path);
-        println!("Processing file: {}", full_path.display());
-
-        let hash = calculate_sha256(&full_path)?;
-        file_hashes.insert(normalized_rel_path.clone(), hash);
 
         // 使用规范化的相对路径作为归档内的路径
         tar_builder
@@ -151,41 +168,40 @@ pub fn restore_files_from_tar_zst(
     let mut failed_count = 0;
     let mut failed_files = Vec::new();
 
-    // 恢复每个文件并进行校验
-    for (rel_path, expected_hash) in file_hashes {
-        match temp_files.get(&rel_path) {
-            Some(file_data) => {
-                // 计算文件的 SHA256 哈希值
-                let actual_hash = calculate_sha256_from_bytes(file_data);
-                
-                if actual_hash == expected_hash {
-                    // 哈希值匹配，恢复文件
-                    let full_restore_path = restore_base_dir.join(&rel_path);
-                    
-                    // 确保父目录存在
-                    if let Some(parent) = full_restore_path.parent() {
-                        create_dir_all(parent).map_err(|e| e.to_string())?;
-                    }
-                    
-                    // 写入文件
-                    let mut output_file = File::create(&full_restore_path).map_err(|e| e.to_string())?;
-                    output_file.write_all(file_data).map_err(|e| e.to_string())?;
-                    
-                    success_count += 1;
-                    println!("成功恢复文件: {}", rel_path);
-                } else {
-                    // 哈希值不匹配，跳过此文件
-                    failed_count += 1;
-                    failed_files.push(rel_path.clone());
-                    println!("文件校验失败，跳过: {} (期望: {}, 实际: {})", rel_path, expected_hash, actual_hash);
+    // 并行验证所有文件的哈希值
+    let verification_results: Vec<(String, bool, Vec<u8>)> = file_hashes
+        .par_iter()
+        .map(|(rel_path, expected_hash)| {
+            match temp_files.get(rel_path) {
+                Some(file_data) => {
+                    let actual_hash = calculate_sha256_from_bytes(file_data);
+                    (rel_path.clone(), actual_hash == *expected_hash, file_data.clone())
                 }
+                None => (rel_path.clone(), false, Vec::new())
             }
-            None => {
-                // 在归档中未找到文件
-                failed_count += 1;
-                failed_files.push(rel_path.clone());
-                println!("在归档中未找到文件: {}", rel_path);
+        })
+        .collect();
+
+    // 串行写入文件（避免磁盘 I/O 竞争）
+    for (rel_path, is_valid, file_data) in verification_results {
+        if is_valid && !file_data.is_empty() {
+            // 哈希值匹配，恢复文件
+            let full_restore_path = restore_base_dir.join(&rel_path);
+            
+            // 确保父目录存在
+            if let Some(parent) = full_restore_path.parent() {
+                create_dir_all(parent).map_err(|e| e.to_string())?;
             }
+            
+            // 写入文件
+            let mut output_file = File::create(&full_restore_path).map_err(|e| e.to_string())?;
+            output_file.write_all(&file_data).map_err(|e| e.to_string())?;
+            
+            success_count += 1;
+        } else {
+            // 哈希值不匹配或文件未找到，跳过此文件
+            failed_count += 1;
+            failed_files.push(rel_path);
         }
     }
 

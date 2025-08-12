@@ -53,6 +53,7 @@ debug = false
 panic = "abort"
 strip = true
 incremental = false
+overflow-checks = false
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-updater = "2"
